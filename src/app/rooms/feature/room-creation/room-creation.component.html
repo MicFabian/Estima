@@ -1,0 +1,21 @@
+<button class="create-btn" (click)="toggleModal()">Create New Room</button>
+
+<div class="modal" *ngIf="showModal()">
+  <div class="modal-content">
+    <h2>Create New Room</h2>
+    <form (ngSubmit)="createRoom()">
+      <div class="form-group">
+        <input [ngModel]="roomName()" 
+               (ngModelChange)="roomName.set($event)"
+               name="roomName" 
+               placeholder="Room name"
+               required>
+        <div class="error-message" *ngIf="error()">{{ error() }}</div>
+      </div>
+      <div class="button-group">
+        <button type="button" (click)="toggleModal()">Cancel</button>
+        <button type="submit" [disabled]="!roomName().trim()">Create</button>
+      </div>
+    </form>
+  </div>
+</div>

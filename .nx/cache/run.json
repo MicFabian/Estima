@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx run estima:serve",
+    "startTime": "2025-01-17T19:07:53.172Z",
+    "endTime": "2025-01-17T19:12:47.467Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "estima:serve:development",
+      "target": "serve",
+      "projectName": "estima",
+      "hash": "10881917434219549946",
+      "startTime": "2025-01-17T19:07:53.180Z",
+      "endTime": "2025-01-17T19:12:47.466Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    }
+  ]
+}
