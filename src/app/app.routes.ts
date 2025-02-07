@@ -1,24 +1,32 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './auth/data-access/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'dashboard',
-    loadComponent: () => import('./dashboard/feature/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'votes',
-    loadComponent: () => import('./votes/feature/vote-creation/vote-creation.component').then(m => m.VoteCreationComponent),
-    canActivate: [AuthGuard]
-  },
-  {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    loadComponent: () =>
+      import('./rooms/feature/rooms-list/rooms-list.component').then(
+        (m) => m.RoomsListComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'rooms/:id',
+    loadComponent: () =>
+      import('./rooms/feature/room-view/room-view.component').then(
+        (m) => m.RoomViewComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/feature/login/login.component').then(
+        (m) => m.LoginComponent
+      ),
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: ''
   }
 ];

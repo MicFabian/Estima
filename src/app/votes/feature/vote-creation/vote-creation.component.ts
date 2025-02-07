@@ -1,90 +1,106 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VotesService } from '../../data-access/state/votes.service';
 import { RoomsService } from '../../../rooms/data-access/state/rooms.service';
-import { KeycloakService } from 'keycloak-angular';
+import { VotesService } from '../../data-access/state/votes.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-vote-creation',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="vote-creation">
-      <h4>Cast Your Vote</h4>
-      <div class="vote-buttons">
-        <button *ngFor="let value of voteValues; trackBy: trackValue" class="vote-btn" (click)="submitVote(value)">
-          {{ value }}
-        </button>
-      </div>
-      <div>
-        <div *ngFor="let vote of votes()">
-          User {{ vote.userId }}: {{ vote.value }}
+      @if (currentRoom()?.currentStory) {
+        <form [formGroup]="voteForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="value">Your Vote</label>
+            <select id="value" formControlName="value" class="form-control" required>
+              <option value="">Select a value</option>
+              <option *ngFor="let value of voteValues" [value]="value">{{ value }}</option>
+            </select>
+          </div>
+          <button type="submit" [disabled]="!voteForm.valid || isLoading()" class="btn btn-primary">
+            Submit Vote
+          </button>
+        </form>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger">
+          {{ errorMessage() }}
         </div>
-      </div>
+      }
     </div>
   `,
-  styles: [`
-    .vote-creation {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    h4 {
-      margin: 0 0 1rem 0;
-      color: #2c3e50;
-    }
-
-    .vote-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-      gap: 0.5rem;
-    }
-
-    .vote-btn {
-      padding: 0.75rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      background: #4CAF50;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.1s, background-color 0.2s;
-    }
-
-    .vote-btn:hover {
-      background: #45a049;
-      transform: translateY(-1px);
-    }
-
-    .vote-btn:active {
-      transform: translateY(0);
-    }
-  `],
-  standalone: true,
-  imports: [CommonModule]
+  styles: [
+    `
+      .vote-creation {
+        padding: 1rem;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        color: white;
+      }
+      .btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .alert {
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+      }
+      .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    `
+  ]
 })
-export class VoteCreationComponent {
-  private votesService = inject(VotesService);
-  private roomsService = inject(RoomsService);
-  private keycloak = inject(KeycloakService);
+export class VoteCreationComponent implements OnInit {
+  @Input() roomId!: string;
+  @Input() storyId!: string;
 
-  readonly voteValues = ['1', '2', '3', '5', '8', '13', '21', '?'];
-  readonly votes = this.votesService.votesList;
+  private readonly roomsService = inject(RoomsService);
+  private readonly votesService = inject(VotesService);
+  private readonly fb = inject(FormBuilder);
 
-  trackValue(index: number, value: string): string {
-    return value;
+  readonly currentRoom = this.roomsService.currentRoom;
+  readonly isLoading = this.votesService.isLoading;
+  readonly errorMessage = this.votesService.errorMessage;
+
+  voteForm: FormGroup;
+  voteValues = ['1', '2', '3', '5', '8', '13', '21', '?'];
+
+  ngOnInit() {
+    this.voteForm = this.fb.group({
+      value: ['', Validators.required]
+    });
+    if (this.storyId) {
+      this.votesService.loadVotesByStory(this.storyId);
+    }
   }
 
-  async submitVote(value: string): Promise<void> {
-    const roomId = this.roomsService.currentRoomValue()?.id;
-    if (!roomId) {
-      console.error('No room selected');
-      return;
+  onSubmit() {
+    if (this.voteForm.valid && this.roomId && this.storyId) {
+      const value = this.voteForm.get('value')?.value;
+      this.votesService.createVote(this.roomId, this.storyId, value);
+      this.voteForm.reset();
     }
-    
-    // Convert '?' to -1 for the backend
-    const numericValue = value === '?' ? -1 : parseInt(value, 10);
-    this.votesService.createVote(roomId, numericValue);
   }
 }

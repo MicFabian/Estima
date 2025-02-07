@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  imports: [RouterModule],
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
-  standalone: true
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`,
+  styleUrls: []
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'estima';
+}

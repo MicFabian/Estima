@@ -1,0 +1,2 @@
+ALTER TABLE stories
+ADD COLUMN voting_active BOOLEAN NOT NULL DEFAULT false;

@@ -1,66 +1,145 @@
 package de.fabiani.estimabackend.modules.rooms;
 
-import de.fabiani.estimabackend.modules.rooms.dto.CreateRoomRequest;
+import de.fabiani.estimabackend.modules.rooms.dto.FinalizeStoryRequest;
+import de.fabiani.estimabackend.modules.rooms.dto.RoomRequest;
 import de.fabiani.estimabackend.modules.rooms.dto.RoomResponse;
+import de.fabiani.estimabackend.modules.rooms.dto.StoryRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rooms")
 @RequiredArgsConstructor
 public class RoomController {
     private final RoomService roomService;
+    private final JwtDecoder jwtDecoder;
 
-    @PostMapping
-    public RoomResponse createRoom(@RequestBody CreateRoomRequest request, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        Room room = roomService.createRoom(request.getName(), userId);
-        return new RoomResponse(room);
+    @GetMapping
+    public ResponseEntity<List<RoomResponse>> getAllRooms(
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 
-    @GetMapping("/{roomId}")
-    public RoomResponse getRoom(@PathVariable UUID roomId) {
-        Room room = roomService.getRoom(roomId);
-        return new RoomResponse(room);
+    @PostMapping
+    public ResponseEntity<RoomResponse> createRoom(
+            @Valid @RequestBody RoomRequest request,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.createRoom(request, jwt.getSubject()));
     }
 
     @PostMapping("/{roomId}/join")
-    public RoomResponse joinRoom(@PathVariable UUID roomId, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        Room room = roomService.joinRoom(roomId, userId);
-        return new RoomResponse(room);
+    public ResponseEntity<RoomResponse> joinRoom(
+            @PathVariable UUID roomId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.joinRoom(roomId, jwt.getSubject()));
     }
 
     @PostMapping("/{roomId}/leave")
-    public RoomResponse leaveRoom(@PathVariable UUID roomId, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        Room room = roomService.leaveRoom(roomId, userId);
-        return new RoomResponse(room);
+    public ResponseEntity<RoomResponse> leaveRoom(
+            @PathVariable UUID roomId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.leaveRoom(roomId, jwt.getSubject()));
     }
 
-    @PostMapping("/{roomId}/start-voting")
-    public RoomResponse startVoting(@PathVariable UUID roomId, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        Room room = roomService.startVoting(roomId, userId);
-        return new RoomResponse(room);
+    @PostMapping("/{roomId}/stories")
+    public ResponseEntity<RoomResponse> addStory(
+            @PathVariable UUID roomId,
+            @Valid @RequestBody StoryRequest request,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.addStory(roomId, request, jwt.getSubject()));
     }
 
-    @PostMapping("/{roomId}/stop-voting")
-    public RoomResponse stopVoting(@PathVariable UUID roomId, @AuthenticationPrincipal Jwt jwt) {
-        String userId = jwt.getSubject();
-        Room room = roomService.stopVoting(roomId, userId);
-        return new RoomResponse(room);
+    @PostMapping("/{roomId}/stories/{storyId}/select")
+    public ResponseEntity<RoomResponse> selectStory(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.selectStory(roomId, storyId, jwt.getSubject()));
     }
 
-    @GetMapping
-    public List<RoomResponse> getAllRooms() {
-        return roomService.getAllRooms().stream()
-                .map(RoomResponse::new)
-                .collect(Collectors.toList());
+    @PostMapping("/{roomId}/stories/{storyId}/start-voting")
+    public ResponseEntity<RoomResponse> startVoting(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.startVoting(roomId, storyId, jwt.getSubject()));
+    }
+
+    @PostMapping("/{roomId}/stories/{storyId}/pause-voting")
+    public ResponseEntity<RoomResponse> pauseVoting(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.pauseVoting(roomId, storyId, jwt.getSubject()));
+    }
+
+    @PostMapping("/{roomId}/stories/{storyId}/discuss")
+    public ResponseEntity<RoomResponse> moveToDiscussion(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.moveToDiscussion(roomId, storyId, jwt.getSubject()));
+    }
+
+    @PostMapping("/{roomId}/stories/{storyId}/revote")
+    public ResponseEntity<RoomResponse> startNewVotingRound(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.startNewVotingRound(roomId, storyId, jwt.getSubject()));
+    }
+
+    @PostMapping("/{roomId}/stories/{storyId}/finish")
+    public ResponseEntity<RoomResponse> finishVoting(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.finishVoting(roomId, storyId, jwt.getSubject()));
+    }
+
+    @PostMapping("/{roomId}/stories/{storyId}/finalize")
+    public ResponseEntity<RoomResponse> finalizeStory(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @Valid @RequestBody FinalizeStoryRequest request,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.finalizeStory(roomId, storyId, request, jwt.getSubject()));
+    }
+
+    @DeleteMapping("/{roomId}/stories/{storyId}")
+    public ResponseEntity<RoomResponse> removeStory(
+            @PathVariable UUID roomId,
+            @PathVariable UUID storyId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.removeStory(roomId, storyId, jwt.getSubject()));
+    }
+
+    @DeleteMapping("/{roomId}")
+    public ResponseEntity<Void> deleteRoom(
+            @PathVariable UUID roomId,
+            @RequestHeader("Authorization") String token) {
+        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        roomService.deleteRoom(roomId, jwt.getSubject());
+        return ResponseEntity.noContent().build();
     }
 }

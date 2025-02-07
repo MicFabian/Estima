@@ -30,17 +30,27 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "CONNECT"));
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization",
             "Content-Type",
             "X-Requested-With",
             "Accept",
-            "Origin"));
+            "Origin",
+            "Sec-WebSocket-Key",
+            "Sec-WebSocket-Version",
+            "Sec-WebSocket-Extensions",
+            "Sec-WebSocket-Protocol",
+            "Upgrade",
+            "Connection"
+        ));
         configuration.setExposedHeaders(Arrays.asList(
             "Access-Control-Allow-Origin",
             "Access-Control-Allow-Credentials",
-            "Authorization"
+            "Authorization",
+            "Sec-WebSocket-Accept",
+            "Upgrade",
+            "Connection"
         ));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
@@ -57,7 +67,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/config", "/realms/**").permitAll()
+                .requestMatchers("/api/config", "/realms/**", "/ws/**", "/ws", "/ws-sockjs/**", "/ws-sockjs").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))

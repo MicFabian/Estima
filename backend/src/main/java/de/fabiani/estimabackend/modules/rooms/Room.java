@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +26,23 @@ public class Room {
     @CollectionTable(name = "room_participants", joinColumns = @JoinColumn(name = "room_id"))
     @Column(name = "user_id")
     private List<String> participants = new ArrayList<>();
-    
-    private boolean votingActive;
 
     @Column(nullable = false)
     private String ownerId;
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Story> stories = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_story_id")
+    private Story currentStory;
+
     public Room(String name, String ownerId) {
         this.name = name;
         this.ownerId = ownerId;
-        this.votingActive = false;
         this.participants = new ArrayList<>();
         this.participants.add(ownerId); // Owner is automatically a participant
+        this.stories = new ArrayList<>();
     }
 }

@@ -1,96 +1,366 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { RoomResponse } from '../../../shared/types/vote.types';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Room, Story } from '../../../shared/types/room.types';
+import { KeycloakService } from 'keycloak-angular';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomsService {
-  private readonly rooms = signal<RoomResponse[]>([]);
-  private readonly currentRoom = signal<RoomResponse | null>(null);
-  private readonly loading = signal<boolean>(false);
-  private readonly error = signal<string | null>(null);
+  private http = inject(HttpClient);
+  private keycloakService = inject(KeycloakService);
 
-  // Computed values
-  readonly roomsList = computed(() => this.rooms());
-  readonly currentRoomValue = computed(() => this.currentRoom());
-  readonly isLoading = computed(() => this.loading());
-  readonly errorMessage = computed(() => this.error());
+  private roomsSignal = signal<Room[]>([]);
+  private currentRoomSignal = signal<Room | null>(null);
+  private currentStoryIdSignal = signal<string | null>(null);
+  private loadingSignal = signal<boolean>(false);
+  private errorSignal = signal<string | null>(null);
 
-  constructor(private http: HttpClient) {}
+  readonly rooms = computed(() => this.roomsSignal());
+  readonly currentRoom = computed(() => this.currentRoomSignal());
+  readonly currentStoryId = computed(() => this.currentStoryIdSignal());
+  readonly isLoading = computed(() => this.loadingSignal());
+  readonly errorMessage = computed(() => this.errorSignal());
+  readonly roomsList = computed(() => this.roomsSignal());
 
-  loadRooms() {
-    this.loading.set(true);
-    this.error.set(null);
+  getCurrentStoryId(): string | null {
+    return this.currentStoryIdSignal();
+  }
+
+  getCurrentUserId(): string {
+    return this.keycloakService.getKeycloakInstance().subject ?? '';
+  }
+
+  readonly isOwner = computed(() => {
+    const room = this.currentRoom();
+    if (!room) return false;
+    const userId = this.keycloakService.getKeycloakInstance().subject;
+    return room.ownerId === userId;
+  });
+
+  async loadRooms(): Promise<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
     
-    this.http.get<RoomResponse[]>(`${environment.apiUrl}/api/rooms`).subscribe({
-      next: (rooms) => {
-        this.rooms.set(rooms);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(err.message);
-        this.loading.set(false);
-      }
-    });
+    try {
+      const rooms = await firstValueFrom(
+        this.http.get<Room[]>(`${environment.apiUrl}/api/rooms`)
+      );
+      this.roomsSignal.set(rooms);
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
   }
 
-  setCurrentRoom(room: RoomResponse) {
-    this.currentRoom.set(room);
+  async createRoom(title: string): Promise<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const room = await firstValueFrom(
+        this.http.post<Room>(`${environment.apiUrl}/api/rooms`, { name: title })
+      );
+      this.roomsSignal.update(rooms => [...rooms, room]);
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
   }
 
-  createRoom(name: string) {
-    this.loading.set(true);
-    this.error.set(null);
+  async joinRoom(roomId: string): Promise<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
 
-    this.http.post<RoomResponse>(`${environment.apiUrl}/api/rooms`, { name }).subscribe({
-      next: (room) => {
-        this.rooms.update(rooms => [...rooms, room]);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(err.message);
-        this.loading.set(false);
+    try {
+      const room = await firstValueFrom(
+        this.http.post<Room>(`${environment.apiUrl}/api/rooms/${roomId}/join`, {})
+      );
+      this.currentRoomSignal.set(room);
+      
+      // Automatically select the current story if it exists and has active voting
+      if (room.currentStory?.votingActive) {
+        await this.selectStory(room.currentStory.id);
       }
-    });
+      
+      await this.loadRooms();
+    } catch (err: any) {
+      if (err.status === 404) {
+        this.errorSignal.set('Room not found. Please check the room ID and try again.');
+      } else {
+        this.errorSignal.set(err.message || 'Failed to join room. Please try again.');
+      }
+      this.loadingSignal.set(false);
+      throw err; // Re-throw to allow component to handle the error
+    }
   }
 
-  joinRoom(roomId: string) {
-    this.loading.set(true);
-    this.error.set(null);
+  async leaveRoom(roomId: string): Promise<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
 
-    this.http.post<RoomResponse>(`${environment.apiUrl}/api/rooms/${roomId}/join`, {}).subscribe({
-      next: (room) => {
-        // Update the current room immediately
-        this.currentRoom.set(room);
-        // Then refresh the room list
-        this.loadRooms();
-      },
-      error: (err) => {
-        this.error.set(err.message);
-        this.loading.set(false);
+    try {
+      await firstValueFrom(
+        this.http.post<Room>(`${environment.apiUrl}/api/rooms/${roomId}/leave`, {})
+      );
+      await this.loadRooms();
+      if (this.currentRoom()?.id === roomId) {
+        this.currentRoomSignal.set(null);
       }
-    });
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
   }
 
-  leaveRoom(roomId: string) {
-    this.loading.set(true);
-    this.error.set(null);
+  async deleteRoom(roomId: string): Promise<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
 
-    this.http.post<RoomResponse>(`${environment.apiUrl}/api/rooms/${roomId}/leave`, {}).subscribe({
-      next: (room) => {
-        // Clear current room if we just left it
-        if (this.currentRoomValue()?.id === roomId) {
-          this.currentRoom.set(null);
-        }
-        // Then refresh the room list
-        this.loadRooms();
-      },
-      error: (err) => {
-        this.error.set(err.message);
-        this.loading.set(false);
+    try {
+      await firstValueFrom(
+        this.http.delete<void>(`${environment.apiUrl}/api/rooms/${roomId}`)
+      );
+      this.roomsSignal.update(rooms => rooms.filter(r => r.id !== roomId));
+      if (this.currentRoom()?.id === roomId) {
+        this.currentRoomSignal.set(null);
       }
-    });
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  setCurrentRoom(room: Room): void {
+    this.currentRoomSignal.set(room);
+  }
+
+  setCurrentStoryId(storyId: string | null): void {
+    this.currentStoryIdSignal.set(storyId);
+  }
+
+  async addStory(story: Omit<Story, 'id' | 'estimate'>): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<Room>(`${environment.apiUrl}/api/rooms/${room.id}/stories`, story)
+      );
+      this.currentRoomSignal.set(response);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    }
+  }
+
+  async selectStory(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/select`,
+          {}
+        )
+      );
+
+      // Update the story's state in the room
+      const updatedStories = updatedRoom.stories.map(story => ({
+        ...story
+      }));
+      
+      const newRoom = {
+        ...updatedRoom,
+        stories: updatedStories,
+        currentStory: updatedStories.find(s => s.id === storyId) || null
+      };
+      
+      this.currentRoomSignal.set(newRoom);
+      this.setCurrentStoryId(storyId);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async removeStory(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    try {
+      const response = await firstValueFrom(
+        this.http.delete<Room>(`${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}`)
+      );
+      this.currentRoomSignal.set(response);
+      this.setCurrentStoryId(null);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    }
+  }
+
+  async deleteStory(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.delete<Room>(`${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}`)
+      );
+      this.currentRoomSignal.set(updatedRoom);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async finalizeVoting(storyId: string, estimate: number): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/finalize`,
+          { estimate }
+        )
+      );
+      this.currentRoomSignal.set(updatedRoom);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async startNewVotingRound(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/start-voting`,
+          {}
+        )
+      );
+      
+      // Update the story's voting state in the room
+      const updatedStories = updatedRoom.stories.map(story => ({
+        ...story,
+        votingActive: story.id === storyId
+      }));
+      
+      const newRoom = {
+        ...updatedRoom,
+        stories: updatedStories,
+        currentStory: updatedStories.find(s => s.id === storyId) || null
+      };
+      
+      this.currentRoomSignal.set(newRoom);
+      this.setCurrentStoryId(storyId);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async pauseVoting(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/pause-voting`,
+          {}
+        )
+      );
+      
+      // Update the story's voting state in the room
+      const updatedStories = updatedRoom.stories.map(story => ({
+        ...story,
+        votingActive: story.id === storyId ? false : story.votingActive
+      }));
+      
+      const newRoom = {
+        ...updatedRoom,
+        stories: updatedStories,
+        currentStory: updatedStories.find(s => s.id === storyId) || null
+      };
+      
+      this.currentRoomSignal.set(newRoom);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async startVoting(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/start-voting`,
+          {}
+        )
+      );
+      
+      // Update the story's voting state in the room
+      const updatedStories = updatedRoom.stories.map(story => ({
+        ...story,
+        votingActive: story.id === storyId
+      }));
+      
+      const newRoom = {
+        ...updatedRoom,
+        stories: updatedStories,
+        currentStory: updatedStories.find(s => s.id === storyId) || null
+      };
+      
+      this.currentRoomSignal.set(newRoom);
+      await this.loadRooms();
+    } catch (err: any) {
+      this.errorSignal.set(err.message);
+    } finally {
+      this.loadingSignal.set(false);
+    }
   }
 }

@@ -1,61 +1,100 @@
 package de.fabiani.estimabackend.modules.votes;
 
 import de.fabiani.estimabackend.modules.rooms.Room;
-import de.fabiani.estimabackend.modules.rooms.RoomService;
-import de.fabiani.estimabackend.modules.votes.dto.VoteRequest;
+import de.fabiani.estimabackend.modules.rooms.RoomRepository;
+import de.fabiani.estimabackend.modules.rooms.Story;
+import de.fabiani.estimabackend.modules.rooms.events.StoryVotingEvent;
+import de.fabiani.estimabackend.modules.votes.dto.VoteResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VoteService {
     private final VoteRepository voteRepository;
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
 
     @Transactional
-    public Vote createVote(VoteRequest request, String userId) {
-        Room room = roomService.getRoom(request.getRoomId());
-        
-        if (!room.getParticipants().contains(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You must be a participant to vote");
-        }
-        
-        if (!room.isVotingActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Voting is not active in this room");
+    public VoteResponse vote(UUID roomId, UUID storyId, String userId, String value) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found"));
+
+        Story story = room.getStories().stream()
+                .filter(s -> s.getId().equals(storyId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Story not found"));
+
+        if (!story.isVotingActive()) {
+            throw new IllegalStateException("Voting is not active for this story");
         }
 
-        // Remove any existing vote by this user in this room
-        voteRepository.deleteByRoomIdAndUserId(request.getRoomId(), userId);
-        
-        Vote vote = new Vote(room, userId, request.getValue());
-        return voteRepository.save(vote);
+        Vote vote = voteRepository.findByRoomIdAndStoryIdAndUserId(roomId, storyId, userId)
+                .orElse(new Vote());
+
+        vote.setRoom(room);
+        vote.setStory(story);
+        vote.setUserId(userId);
+        vote.setValue(value);
+
+        Vote savedVote = voteRepository.save(vote);
+        return new VoteResponse(savedVote);
     }
 
     @Transactional(readOnly = true)
-    public List<Vote> getVotesByRoomId(UUID roomId, String userId) {
-        Room room = roomService.getRoom(roomId);
-        
-        if (!room.getParticipants().contains(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You must be a participant to view votes");
-        }
-        
-        return voteRepository.findByRoomId(roomId);
+    public List<VoteResponse> getVotesForStory(UUID roomId, UUID storyId) {
+        return voteRepository.findByRoomIdAndStoryId(roomId, storyId)
+                .stream()
+                .map(VoteResponse::new)
+                .toList();
+    }
+
+    public List<VoteResponse> getVotesByRoom(UUID roomId) {
+        return voteRepository.findByRoomId(roomId).stream()
+                .map(VoteResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public void deleteVotesByRoomId(UUID roomId, String userId) {
-        Room room = roomService.getRoom(roomId);
-        
-        if (!room.getOwnerId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the room owner can clear votes");
+    public VoteResponse updateVote(UUID voteId, String value, String userId) {
+        Vote vote = voteRepository.findById(voteId)
+                .orElseThrow(() -> new EntityNotFoundException("Vote not found"));
+
+        if (!vote.getUserId().equals(userId)) {
+            throw new IllegalStateException("Only the vote owner can update their vote");
         }
-        
-        voteRepository.deleteByRoomId(roomId);
+
+        Story story = vote.getStory();
+        if (!story.isVotingActive()) {
+            throw new IllegalStateException("Voting is not active for this story");
+        }
+
+        // If marking as ready/not ready, preserve the original vote value
+        if (value.equals("ready") || value.equals("not_ready")) {
+            vote.setReady(value.equals("ready"));
+        } else {
+            vote.setValue(value);
+            vote.setReady(false); // Reset ready status when changing vote
+        }
+
+        return new VoteResponse(voteRepository.save(vote));
+    }
+
+    @EventListener
+    @Transactional
+    public void handleStoryVotingEvent(StoryVotingEvent event) {
+        if (event.isActive()) {
+            // When voting starts, do nothing to preserve existing votes
+            return;
+        }
+
+        // When voting stops/paused, clear previous votes
+        voteRepository.deleteByStoryId(event.getStoryId());
     }
 }
