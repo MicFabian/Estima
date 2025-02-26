@@ -1,0 +1,16 @@
+<div class="voting-cards">
+  <mat-card 
+    *ngFor="let value of voteValues; trackBy: trackValue"
+    class="vote-card" 
+    [class.selected]="isSelected(value)"
+    (click)="submitVote(value)"
+  >
+    <mat-card-content>
+      {{ value === '?' ? '?' : value }}
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="mt-4 text-red-500" *ngIf="errorMessage()">
+  {{ errorMessage() }}
+</div>

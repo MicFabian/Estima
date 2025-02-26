@@ -263,9 +263,10 @@ export class RoomsService {
     this.errorSignal.set(null);
 
     try {
+      console.log(`Starting new voting round for story: ${storyId}`);
       const updatedRoom = await firstValueFrom(
         this.http.post<Room>(
-          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/start-voting`,
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/revote`,
           {}
         )
       );
@@ -286,6 +287,7 @@ export class RoomsService {
       this.setCurrentStoryId(storyId);
       await this.loadRooms();
     } catch (err: any) {
+      console.error('Error starting new voting round:', err);
       this.errorSignal.set(err.message);
     } finally {
       this.loadingSignal.set(false);
@@ -332,9 +334,6 @@ export class RoomsService {
     const room = this.currentRoom();
     if (!room) return;
 
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-
     try {
       const updatedRoom = await firstValueFrom(
         this.http.post<Room>(
@@ -342,25 +341,46 @@ export class RoomsService {
           {}
         )
       );
-      
-      // Update the story's voting state in the room
-      const updatedStories = updatedRoom.stories.map(story => ({
-        ...story,
-        votingActive: story.id === storyId
-      }));
-      
-      const newRoom = {
-        ...updatedRoom,
-        stories: updatedStories,
-        currentStory: updatedStories.find(s => s.id === storyId) || null
-      };
-      
-      this.currentRoomSignal.set(newRoom);
-      await this.loadRooms();
+      this.currentRoomSignal.set(updatedRoom);
     } catch (err: any) {
-      this.errorSignal.set(err.message);
-    } finally {
-      this.loadingSignal.set(false);
+      this.errorSignal.set(err.message || 'Failed to start voting.');
+      throw err;
+    }
+  }
+
+  async moveToDiscussion(storyId: string): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/discuss`,
+          {}
+        )
+      );
+      this.currentRoomSignal.set(updatedRoom);
+    } catch (err: any) {
+      this.errorSignal.set(err.message || 'Failed to move to discussion phase.');
+      throw err;
+    }
+  }
+
+  async finalizeStory(storyId: string, estimate: number): Promise<void> {
+    const room = this.currentRoom();
+    if (!room) return;
+
+    try {
+      const updatedRoom = await firstValueFrom(
+        this.http.post<Room>(
+          `${environment.apiUrl}/api/rooms/${room.id}/stories/${storyId}/finalize`,
+          { estimate }
+        )
+      );
+      this.currentRoomSignal.set(updatedRoom);
+    } catch (err: any) {
+      this.errorSignal.set(err.message || 'Failed to finalize story.');
+      throw err;
     }
   }
 }

@@ -1,0 +1,271 @@
+<div class="room-view">
+  @if (currentRoom(); as room) {
+    <mat-toolbar color="primary">
+      <div class="flex items-center justify-between w-full">
+        <div class="flex items-center gap-4">
+          <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <span class="text-xl">{{ room.name }}</span>
+        </div>
+        <div class="toolbar-actions flex items-center gap-4">
+          @if (currentStory() && hasVotingStarted()) {
+            @if (isAdmin()) {
+              <button mat-button
+                      [color]="currentStory()?.votingActive ? 'warn' : 'primary'"
+                      (click)="toggleVoting()">
+                <mat-icon>{{ currentStory()?.votingActive ? 'pause' : 'play_arrow' }}</mat-icon>
+                {{ currentStory()?.votingActive ? 'Pause Voting' : 'Resume Voting' }}
+              </button>
+            }
+            <div class="flex items-center gap-2">
+              <mat-icon [class.text-green-500]="currentStory()?.votingActive" 
+                       [class.text-red-500]="!currentStory()?.votingActive">
+                {{ currentStory()?.votingActive ? 'play_circle' : 'pause_circle' }}
+              </mat-icon>
+              <span [class.text-green-500]="currentStory()?.votingActive" 
+                    [class.text-red-500]="!currentStory()?.votingActive">
+                {{ currentStory()?.votingActive ? 'Active' : 'Paused' }}
+              </span>
+            </div>
+          }
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-blue-500">group</mat-icon>
+            <span>{{ room.participants.length }} {{ room.participants.length === 1 ? 'Member' : 'Members' }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    <div class="room-content">
+      <div class="flex flex-col h-[calc(100vh-200px)]">
+        <!-- Stories Grid -->
+        <div class="stories-grid p-4">
+          @for (story of storiesToEstimate(); track story.id) {
+            <mat-card 
+              [class.selected]="story.id === currentStory()?.id" 
+              class="story-card cursor-pointer">
+              <mat-card-content>
+                <div class="flex flex-col h-full">
+                  <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-semibold">{{ story.title }}</h3>
+                    <div class="flex items-center gap-2">
+                      @if (story.estimate) {
+                        <div class="estimate-badge">
+                          {{ story.estimate }}
+                        </div>
+                      }
+                      @if (isAdmin()) {
+                        <button mat-icon-button color="warn" 
+                                (click)="deleteStory(story); $event.stopPropagation()" 
+                                matTooltip="Delete Story">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      }
+                    </div>
+                  </div>
+                  <p class="text-gray-600 flex-grow">{{ story.description }}</p>
+                  <div class="mt-2">
+                    <button mat-button color="primary" (click)="selectStory(story)">
+                      Select for Voting
+                    </button>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          <!-- Add Story Card -->
+          @if (isAdmin()) {
+            <mat-card (click)="openAddStoryDialog()" 
+                     class="story-card cursor-pointer add-story-card">
+              <mat-card-content class="flex items-center justify-center h-full">
+                <div class="text-center">
+                  <mat-icon class="text-4xl mb-2">add_circle_outline</mat-icon>
+                  <p>Add New Story</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+
+        <!-- Current Story and Voting -->
+        <mat-divider></mat-divider>
+        
+        <div class="p-4 flex-grow">
+          @if (currentStory(); as story) {
+            <!-- Voting Section -->
+            @if (story.votingActive && story.votingPhase === 'VOTING') {
+              <div class="flex flex-col gap-4">
+                <app-voting-cards [story]="story"></app-voting-cards>
+                <app-votes-overview [story]="story"></app-votes-overview>
+                
+                @if (isAdmin() && getVotes().length > 0) {
+                  <div class="mt-4 flex justify-end">
+                    <button mat-raised-button color="primary" (click)="moveToDiscussionPhase(story.id)">
+                      <mat-icon>comment</mat-icon>
+                      Move to Discussion
+                    </button>
+                  </div>
+                }
+              </div>
+            } @else if (story.votingPhase === 'DISCUSSING') {
+              <!-- Discussion Phase -->
+              <div class="discussion-phase p-4">
+                <mat-card>
+                  <mat-card-header>
+                    <mat-card-title>Discussion Phase</mat-card-title>
+                    <mat-card-subtitle>Discuss the estimates and come to a consensus</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                      <div class="vote-summary">
+                        <h3 class="text-lg font-medium mb-2">Vote Summary</h3>
+                        <div class="votes-grid">
+                          @for (vote of getVotes(); track vote.userId) {
+                            <div class="vote-result">
+                              <div class="vote-badge">{{ formatVoteValue(vote.value) }}</div>
+                              <div class="vote-user">{{ getUserDisplayName(vote.userId) || 'Participant' }}</div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                      <div class="statistics">
+                        <h3 class="text-lg font-medium mb-2">Statistics</h3>
+                        <div class="stat-item">
+                          <span class="stat-label">Consensus Level:</span>
+                          <span class="stat-value">{{ getConsensusText(story) }}</span>
+                          <div class="consensus-bar" [style.width.%]="getConsensusLevel(story) * 100"></div>
+                        </div>
+                        <div class="stat-item">
+                          <span class="stat-label">Most Common Estimate:</span>
+                          <span class="stat-value">{{ getMostCommonVote(getVotes()) }}</span>
+                        </div>
+                        <div class="stat-item">
+                          <span class="stat-label">Average Estimate:</span>
+                          <span class="stat-value">{{ calculateAverageVote() }}</span>
+                        </div>
+                        <div class="stat-item">
+                          <span class="stat-label">Range:</span>
+                          <span class="stat-value">{{ getVoteRange() }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <mat-divider class="mb-4 mt-2"></mat-divider>
+                    
+                    <div class="estimate-selection">
+                      <h3 class="text-lg font-medium mb-2">Select Final Estimate</h3>
+                      <div class="estimate-options">
+                        @for (value of getUniqueVoteValues(); track value) {
+                          <div 
+                            class="estimate-option cursor-pointer" 
+                            [class.selected]="selectedEstimate === value"
+                            (click)="selectEstimate(value)">
+                            {{ formatVoteValue(value) }}
+                            <span class="vote-count">({{ getVoteCountForValue(value) }})</span>
+                          </div>
+                        }
+                      </div>
+                      
+                      @if (isAdmin()) {
+                        <div class="mt-4 flex justify-end">
+                          <button 
+                            mat-raised-button 
+                            color="primary" 
+                            [disabled]="!selectedEstimate"
+                            (click)="finalizeStoryWithSelection(story)">
+                            <mat-icon>check_circle</mat-icon>
+                            Finalize Estimation
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            } @else if (story.votingPhase === VotingPhase.FINISHED) {
+              <!-- Completed Phase -->
+              <div class="results-section">
+                <mat-card>
+                  <mat-card-header>
+                    <mat-card-title>Estimation Completed</mat-card-title>
+                    <mat-card-subtitle>Story has been successfully estimated</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                      <div class="result-card">
+                        <h3 class="text-lg font-medium mb-2">Final Estimate</h3>
+                        <div class="estimate-badge">
+                          {{ story.estimate }}
+                        </div>
+                      </div>
+                      <div class="result-card">
+                        <h3 class="text-lg font-medium mb-2">Consensus Level</h3>
+                        <div 
+                          class="consensus-indicator" 
+                          [class.high]="getConsensusLevel(story) > 0.7"
+                          [class.medium]="getConsensusLevel(story) > 0.4 && getConsensusLevel(story) <= 0.7"
+                          [class.low]="getConsensusLevel(story) <= 0.4">
+                          {{ getConsensusText(story) }}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <mat-divider class="mb-4 mt-2"></mat-divider>
+                    
+                    <div class="vote-summary">
+                      <h3 class="text-lg font-medium mb-2">Vote Summary</h3>
+                      <div class="votes-grid">
+                        @for (vote of getVotes(); track vote.userId) {
+                          <div class="vote-result">
+                            <div class="vote-badge">{{ formatVoteValue(vote.value) }}</div>
+                            <div class="vote-user">{{ getUserDisplayName(vote.userId) || 'Participant' }}</div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    
+                    @if (isAdmin()) {
+                      <div class="mt-4 flex justify-end">
+                        <button mat-raised-button color="primary" (click)="startNewVotingRound(story.id)">
+                          <mat-icon>add</mat-icon>
+                          Start New Story
+                        </button>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            } @else {
+              <!-- Not Started Yet -->
+              <div class="flex flex-col items-center justify-center p-4">
+                <mat-icon class="text-5xl mb-2 text-gray-400">play_circle_outline</mat-icon>
+                <h2 class="text-xl font-medium text-gray-600">Waiting to Start Voting</h2>
+                <p class="text-gray-500 mt-2">The voting session has not started yet.</p>
+                
+                @if (isAdmin()) {
+                  <button mat-raised-button color="primary" class="mt-4" (click)="startVoting()">
+                    <mat-icon>play_arrow</mat-icon>
+                    Start Voting
+                  </button>
+                }
+              </div>
+            }
+          } @else {
+            <!-- No Story Selected -->
+            <div class="flex flex-col items-center justify-center p-4">
+              <mat-icon class="text-5xl mb-2 text-gray-400">article</mat-icon>
+              <h2 class="text-xl font-medium text-gray-600">No Story Selected</h2>
+              <p class="text-gray-500 mt-2">Select a story from above to start estimation.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="flex items-center justify-center h-full">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+</div>

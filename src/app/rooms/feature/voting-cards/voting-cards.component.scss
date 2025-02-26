@@ -1,0 +1,27 @@
+.voting-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.vote-card {
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &.selected {
+    background-color: #e3f2fd;
+    border: 2px solid #2196f3;
+  }
+}
+
+mat-card-content {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem;
+}

@@ -201,4 +201,19 @@ export class VotesService {
   getCurrentUserId(): string {
     return this.roomsService.getCurrentUserId();
   }
+
+  clearVotes(): void {
+    this.votes.set([]);
+    this.currentVotesSubject.next([]);
+  }
+
+  getVotesForStory(roomId: string, storyId: string) {
+    console.log(`Getting votes for room ${roomId} and story ${storyId}`);
+    return this.getVotesByRoom(roomId, storyId);
+  }
+
+  vote(request: { roomId: string; storyId: string; value: string }) {
+    console.log('Submitting vote:', request);
+    return this.submitVote(request.storyId, request.value);
+  }
 }

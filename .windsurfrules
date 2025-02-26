@@ -1,0 +1,36 @@
+Ich möchte eine Estimation Poker App entwickeln, die mit Spring Boot (Java 23) und Angular gebaut wird. Sie soll für Web und Mobile (mit Capacitor) optimiert sein und moderne Technologien nutzen.
+
+Technologie-Stack & Anforderungen
+Backend:
+
+Spring Boot (aktuellste Version)
+Spring Modulith für modulare Architektur
+PostgreSQL als Datenbank
+Flyway für Datenbankmigrationen
+JWT-basierte Authentifizierung über Keycloak
+Unit & Integration Tests mit Spock & Groovy
+Frontend:
+
+Angular (aktuellste Version)
+Angular Material oder eine alternative UI-Bibliothek
+Responsive UI für Desktop & Mobile
+Separate html und css Dateien
+Nutzung von Capacitor zur Erstellung einer nativen App für iOS & Android
+Funktionen:
+
+Login & Benutzerverwaltung über Keycloak (mit verschiedenen Rollen)
+Team-Management: Teams können erstellt, verwaltet und Benutzer zugewiesen werden
+Räume für Estimations: Benutzer können Räume erstellen und betreten
+Stories & Voting:
+Ein Benutzer kann eine Story vorschlagen, die dann geschätzt wird.
+Teammitglieder können anonym über eine Story abstimmen.
+Unterstützung für verschiedene Voting-Stile (z.B. Fibonacci, T-Shirt Sizes, Custom).
+Vergangene & offene Estimations einsehen und historische Daten analysieren
+Anpassbare Voting-Karten & Stile
+Echtzeit-Kommunikation mit Websockets oder GraphQL
+Zusätzliche Anforderungen:
+
+Deployment: Docker-Container für Backend und Frontend
+CI/CD-Pipeline zur automatisierten Bereitstellung
+Mobile App Build mit Capacitor für iOS und Android
+Gute Testabdeckung mit Spock & Groovy (Backend) und Jest/Cypress (Frontend)

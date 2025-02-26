@@ -7,6 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { rxStompServiceFactory } from './core/websocket/rx-stomp-service-factory';
 import { apiInterceptor } from './core/interceptors/api.interceptor.factory';
+import { RoomEventsService } from './rooms/data-access/state/room-events.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: RxStompService,
       useFactory: rxStompServiceFactory
-    }
+    },
+    RoomEventsService
   ]
 };

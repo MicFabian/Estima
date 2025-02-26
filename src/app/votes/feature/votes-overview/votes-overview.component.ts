@@ -265,7 +265,12 @@ export class VotesOverviewComponent {
 
   startResolution(): void {
     this.resolvingVotes.set(true);
-    this.roomsService.pauseVoting(this.story.id);
+    // Use moveToDiscussion instead of pauseVoting to properly transition to discussion phase
+    this.roomsService.moveToDiscussion(this.story.id).catch(error => {
+      console.error('Failed to start discussion phase', error);
+      // Fallback to just pausing voting if discussion transition fails
+      this.roomsService.pauseVoting(this.story.id);
+    });
   }
 
   getUniqueVotes(): string[] {

@@ -1,0 +1,17 @@
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+  }
+  
+  p {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+}

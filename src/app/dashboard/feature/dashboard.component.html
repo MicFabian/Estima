@@ -1,0 +1,39 @@
+<div class="dashboard">
+  <div class="rooms-panel">
+    <h2>Available Rooms</h2>
+    @if (isLoading()) {
+      <p>Loading rooms...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else {
+      <div class="rooms-list">
+        @for (room of rooms(); track room.id) {
+          <div class="room-card" [class.selected]="room.id === currentRoom()?.id">
+            <div class="room-info">
+              <h3>{{ room.title }}</h3>
+              <p>Stories: {{ room.stories.length || 0 }}</p>
+            </div>
+            <div class="room-actions">
+              @if (room.id === currentRoom()?.id) {
+                <button (click)="leaveRoom(room.id)" class="btn btn-danger">Leave</button>
+              } @else {
+                <button (click)="joinRoom(room.id)" class="btn btn-primary">Join</button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+    <app-room-creation />
+  </div>
+
+  @if (currentRoom()) {
+    <div class="room-content">
+      <h2>Room: {{ currentRoom()?.title }}</h2>
+      <div class="room-components">
+        <app-vote-creation />
+        <app-votes-history />
+      </div>
+    </div>
+  }
+</div>

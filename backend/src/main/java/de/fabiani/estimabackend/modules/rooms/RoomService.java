@@ -7,6 +7,7 @@ import de.fabiani.estimabackend.modules.rooms.dto.StoryRequest;
 import de.fabiani.estimabackend.modules.rooms.events.StoryVotingEvent;
 import de.fabiani.estimabackend.modules.shared.EventService;
 import de.fabiani.estimabackend.modules.votes.VoteRepository;
+import de.fabiani.estimabackend.modules.votes.event.DiscussAndResolveEvent;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -188,6 +189,12 @@ public class RoomService {
             room.setCurrentStory(null);
         }
         
+        // Delete any votes for this story
+        voteRepository.deleteByRoomIdAndStoryId(roomId, storyId);
+        
+        // Publish event to notify clients about story deletion
+        eventService.notifyStoryDeleted(roomId, storyId);
+        
         return new RoomResponse(roomRepository.save(room));
     }
 
@@ -240,7 +247,9 @@ public class RoomService {
         story.setVotingPhase(Story.VotingPhase.DISCUSSING);
         story.setVotingActive(false);
         
+        // Publish both events to maintain backward compatibility and trigger the discussion phase
         eventService.publish(new StoryVotingEvent(storyId, false));
+        eventService.publish(new DiscussAndResolveEvent(story));
         
         return new RoomResponse(roomRepository.save(room));
     }
