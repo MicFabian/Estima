@@ -37,7 +37,7 @@
                 }
               ],
               "styles": [
-                "./src/styles.scss"
+                "src/styles.scss"
               ],
               "scripts": []
             },
@@ -317,6 +317,33 @@
         "hash": "sha512-/4msIXebFfDWcsyYGDzcxrhn1G1bWVTVbLYqkDXDVYFTqWRpBA8UtQ6eLM8FrJqrHw9e/1cxkqBNsR0tkDJ9FQ=="
       }
     },
+    "npm:@angular/cdk": {
+      "type": "npm",
+      "name": "npm:@angular/cdk",
+      "data": {
+        "version": "19.1.1",
+        "packageName": "@angular/cdk",
+        "hash": "sha512-MmfNB9iANuDN1TS+HL8uKqA3/7pdVeCRN+HdAcfqFrcqZmSUUSlYWy8PXqymmyeXxoSwt9p4I/6R0By03VoCMw=="
+      }
+    },
+    "npm:parse5@7.2.1": {
+      "type": "npm",
+      "name": "npm:parse5@7.2.1",
+      "data": {
+        "version": "7.2.1",
+        "packageName": "parse5",
+        "hash": "sha512-BuBYQYlv1ckiPdQi/ohiivi9Sagc9JG+Ozs0r7b/0iK3sKmrb0b9FdWdBbOdx6hBCM/F9Ir82ofnBhtZOjCRPQ=="
+      }
+    },
+    "npm:parse5": {
+      "type": "npm",
+      "name": "npm:parse5",
+      "data": {
+        "version": "4.0.0",
+        "packageName": "parse5",
+        "hash": "sha512-VrZ7eOd3T1Fk4XWNXMgiGBK/z0MG48BWG2uQNU4I72fkQuKUTZpl+u9k+CxEG0twMVzSmXEEz12z5Fnw1jIQFA=="
+      }
+    },
     "npm:@angular/cli": {
       "type": "npm",
       "name": "npm:@angular/cli",
@@ -378,6 +405,15 @@
         "version": "19.0.4",
         "packageName": "@angular/language-service",
         "hash": "sha512-Mf4TwJ09fReFFVzvfwSWUVOO66wS7IpzG5Eg+s46+v3VMWT8c7Tayp+wRLD6bvj58g8MJJeIerrFCP8bDhGKiw=="
+      }
+    },
+    "npm:@angular/material": {
+      "type": "npm",
+      "name": "npm:@angular/material",
+      "data": {
+        "version": "19.1.1",
+        "packageName": "@angular/material",
+        "hash": "sha512-x/EwyBx3yCIYyu/hve19eecmufJzwltRWOO/3Y74jY4jSNNFrR9046t0ptw4fyEXjN8UQZI6Fp/melcZxl3IiA=="
       }
     },
     "npm:@angular/platform-browser": {
@@ -3224,15 +3260,6 @@
         "hash": "sha512-T8BJQHbGySRkR4JYLcH3YIscbRJI/GNWidNHL5GzRG+3i8Z6XmR0KLTIEoZGaCLpTGR8hcCG5Lfj/uF5pa4Yww=="
       }
     },
-    "npm:@ngxs/devtools-plugin": {
-      "type": "npm",
-      "name": "npm:@ngxs/devtools-plugin",
-      "data": {
-        "version": "19.0.0",
-        "packageName": "@ngxs/devtools-plugin",
-        "hash": "sha512-z3O/G0fGeSc/mQRMBWwQ98W+kB0QpIMPZg2FLIubyZwWydouVatjhYck4IDLR/h5i6lq4McKioMK2tn/mXZqnQ=="
-      }
-    },
     "npm:@ngxs/storage-plugin": {
       "type": "npm",
       "name": "npm:@ngxs/storage-plugin",
@@ -4772,6 +4799,69 @@
         "hash": "sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA=="
       }
     },
+    "npm:@stomp/ng2-stompjs": {
+      "type": "npm",
+      "name": "npm:@stomp/ng2-stompjs",
+      "data": {
+        "version": "8.0.0",
+        "packageName": "@stomp/ng2-stompjs",
+        "hash": "sha512-1TTwdK7aUaRLfewG2FOqd3ZeIyIchKwOBzJytvUckjrBbpdeAXLXY0mCBFczoY16fSsxiAnZfJffFicStD+Dug=="
+      }
+    },
+    "npm:@stomp/rx-stomp@1.2.0": {
+      "type": "npm",
+      "name": "npm:@stomp/rx-stomp@1.2.0",
+      "data": {
+        "version": "1.2.0",
+        "packageName": "@stomp/rx-stomp",
+        "hash": "sha512-QLzPe3q0EwLB+cVWdUFEO4z5tyR+kPnXJANKN2UvB7Spz/oViHF959cydmXdQWaK7NHp86VO54TgFfXbHVnSLg=="
+      }
+    },
+    "npm:@stomp/rx-stomp": {
+      "type": "npm",
+      "name": "npm:@stomp/rx-stomp",
+      "data": {
+        "version": "2.0.0",
+        "packageName": "@stomp/rx-stomp",
+        "hash": "sha512-3UxTxAA3NWGnwFfIvN8AigJ7BxGXG0u5IK8K12mQ9cCMuaT/MM7xlyZnuV8sDbHiqqLlbwA1wk1fDfUyOTIeug=="
+      }
+    },
+    "npm:@stomp/stompjs@6.1.2": {
+      "type": "npm",
+      "name": "npm:@stomp/stompjs@6.1.2",
+      "data": {
+        "version": "6.1.2",
+        "packageName": "@stomp/stompjs",
+        "hash": "sha512-FHDTrIFM5Ospi4L3Xhj6v2+NzCVAeNDcBe95YjUWhWiRMrBF6uN3I7AUOlRgT6jU/2WQvvYK8ZaIxFfxFp+uHQ=="
+      }
+    },
+    "npm:@stomp/stompjs": {
+      "type": "npm",
+      "name": "npm:@stomp/stompjs",
+      "data": {
+        "version": "7.0.0",
+        "packageName": "@stomp/stompjs",
+        "hash": "sha512-fGdq4wPDnSV/KyOsjq4P+zLc8MFWC3lMmP5FBgLWKPJTYcuCbAIrnRGjB7q2jHZdYCOD5vxLuFoKIYLy5/u8Pw=="
+      }
+    },
+    "npm:tslib@1.14.1": {
+      "type": "npm",
+      "name": "npm:tslib@1.14.1",
+      "data": {
+        "version": "1.14.1",
+        "packageName": "tslib",
+        "hash": "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
+      }
+    },
+    "npm:tslib": {
+      "type": "npm",
+      "name": "npm:tslib",
+      "data": {
+        "version": "2.8.1",
+        "packageName": "tslib",
+        "hash": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
+      }
+    },
     "npm:@swc-node/core": {
       "type": "npm",
       "name": "npm:@swc-node/core",
@@ -5202,24 +5292,6 @@
         "version": "20.0.1",
         "packageName": "@types/jsdom",
         "hash": "sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ=="
-      }
-    },
-    "npm:parse5@7.2.1": {
-      "type": "npm",
-      "name": "npm:parse5@7.2.1",
-      "data": {
-        "version": "7.2.1",
-        "packageName": "parse5",
-        "hash": "sha512-BuBYQYlv1ckiPdQi/ohiivi9Sagc9JG+Ozs0r7b/0iK3sKmrb0b9FdWdBbOdx6hBCM/F9Ir82ofnBhtZOjCRPQ=="
-      }
-    },
-    "npm:parse5": {
-      "type": "npm",
-      "name": "npm:parse5",
-      "data": {
-        "version": "4.0.0",
-        "packageName": "parse5",
-        "hash": "sha512-VrZ7eOd3T1Fk4XWNXMgiGBK/z0MG48BWG2uQNU4I72fkQuKUTZpl+u9k+CxEG0twMVzSmXEEz12z5Fnw1jIQFA=="
       }
     },
     "npm:@types/json-schema": {
@@ -5805,6 +5877,15 @@
         "version": "19.0.2",
         "packageName": "angular-eslint",
         "hash": "sha512-d8P/Y5+QXOOko1x5W3Pp/p4cr7arXKGHdMAv6jtrqHjsIrlBqZSZY18apKRdTysFjYuKa5G9M3hejtzwXXHNhg=="
+      }
+    },
+    "npm:angular2-uuid": {
+      "type": "npm",
+      "name": "npm:angular2-uuid",
+      "data": {
+        "version": "1.1.1",
+        "packageName": "angular2-uuid",
+        "hash": "sha512-6AXPyii9q8KBFGagybLNVmdGJLPcVZAhmv3odNGSJIA18LuJ3xOe6uN9GvjlQsGfdmYeuxlsGnFEUu7gPhkc+g=="
       }
     },
     "npm:ansi-colors": {
@@ -12476,15 +12557,6 @@
         "hash": "sha512-fw/7265mIWukrSHd0i+wSwx64kYUSAKPfxRDksjKIYTxSAp9W9/xcZVBF4Kl0eqQd5eBpAQ/oQrc5RyM/0c1GQ=="
       }
     },
-    "npm:tslib": {
-      "type": "npm",
-      "name": "npm:tslib",
-      "data": {
-        "version": "2.8.1",
-        "packageName": "tslib",
-        "hash": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
-      }
-    },
     "npm:tsscmp": {
       "type": "npm",
       "name": "npm:tsscmp",
@@ -13214,6 +13286,11 @@
       },
       {
         "source": "estima",
+        "target": "npm:@angular/cdk",
+        "type": "static"
+      },
+      {
+        "source": "estima",
         "target": "npm:@angular/common",
         "type": "static"
       },
@@ -13234,6 +13311,11 @@
       },
       {
         "source": "estima",
+        "target": "npm:@angular/material",
+        "type": "static"
+      },
+      {
+        "source": "estima",
         "target": "npm:@angular/platform-browser",
         "type": "static"
       },
@@ -13245,6 +13327,26 @@
       {
         "source": "estima",
         "target": "npm:@angular/router",
+        "type": "static"
+      },
+      {
+        "source": "estima",
+        "target": "npm:@ngxs/storage-plugin",
+        "type": "static"
+      },
+      {
+        "source": "estima",
+        "target": "npm:@ngxs/store",
+        "type": "static"
+      },
+      {
+        "source": "estima",
+        "target": "npm:@stomp/ng2-stompjs",
+        "type": "static"
+      },
+      {
+        "source": "estima",
+        "target": "npm:@stomp/rx-stomp",
         "type": "static"
       },
       {
@@ -13265,16 +13367,6 @@
       {
         "source": "estima",
         "target": "npm:zone.js",
-        "type": "static"
-      },
-      {
-        "source": "estima",
-        "target": "npm:@ngxs/store",
-        "type": "static"
-      },
-      {
-        "source": "estima",
-        "target": "npm:@ngxs/storage-plugin",
         "type": "static"
       }
     ],
@@ -14031,6 +14123,40 @@
         "type": "static"
       }
     ],
+    "npm:@angular/cdk": [
+      {
+        "source": "npm:@angular/cdk",
+        "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/cdk",
+        "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/cdk",
+        "target": "npm:rxjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/cdk",
+        "target": "npm:tslib",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/cdk",
+        "target": "npm:parse5@7.2.1",
+        "type": "static"
+      }
+    ],
+    "npm:parse5@7.2.1": [
+      {
+        "source": "npm:parse5@7.2.1",
+        "target": "npm:entities",
+        "type": "static"
+      }
+    ],
     "npm:@angular/cli": [
       {
         "source": "npm:@angular/cli",
@@ -14239,6 +14365,48 @@
       },
       {
         "source": "npm:@angular/forms",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
+    "npm:@angular/material": [
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/animations",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/cdk",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/forms",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:@angular/platform-browser",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
+        "target": "npm:rxjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/material",
         "target": "npm:tslib",
         "type": "static"
       }
@@ -18254,28 +18422,6 @@
         "type": "static"
       }
     ],
-    "npm:@ngxs/devtools-plugin": [
-      {
-        "source": "npm:@ngxs/devtools-plugin",
-        "target": "npm:@angular/core",
-        "type": "static"
-      },
-      {
-        "source": "npm:@ngxs/devtools-plugin",
-        "target": "npm:@ngxs/store",
-        "type": "static"
-      },
-      {
-        "source": "npm:@ngxs/devtools-plugin",
-        "target": "npm:rxjs",
-        "type": "static"
-      },
-      {
-        "source": "npm:@ngxs/devtools-plugin",
-        "target": "npm:tslib",
-        "type": "static"
-      }
-    ],
     "npm:@ngxs/storage-plugin": [
       {
         "source": "npm:@ngxs/storage-plugin",
@@ -20248,6 +20394,42 @@
         "type": "static"
       }
     ],
+    "npm:@stomp/ng2-stompjs": [
+      {
+        "source": "npm:@stomp/ng2-stompjs",
+        "target": "npm:@stomp/rx-stomp@1.2.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:@stomp/ng2-stompjs",
+        "target": "npm:tslib@1.14.1",
+        "type": "static"
+      }
+    ],
+    "npm:@stomp/rx-stomp@1.2.0": [
+      {
+        "source": "npm:@stomp/rx-stomp@1.2.0",
+        "target": "npm:@stomp/stompjs@6.1.2",
+        "type": "static"
+      },
+      {
+        "source": "npm:@stomp/rx-stomp@1.2.0",
+        "target": "npm:angular2-uuid",
+        "type": "static"
+      }
+    ],
+    "npm:@stomp/rx-stomp": [
+      {
+        "source": "npm:@stomp/rx-stomp",
+        "target": "npm:@stomp/stompjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@stomp/rx-stomp",
+        "target": "npm:rxjs",
+        "type": "static"
+      }
+    ],
     "npm:@swc-node/core": [
       {
         "source": "npm:@swc-node/core",
@@ -20649,13 +20831,6 @@
       {
         "source": "npm:@types/jsdom",
         "target": "npm:parse5@7.2.1",
-        "type": "static"
-      }
-    ],
-    "npm:parse5@7.2.1": [
-      {
-        "source": "npm:parse5@7.2.1",
-        "target": "npm:entities",
         "type": "static"
       }
     ],

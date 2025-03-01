@@ -1,8 +1,8 @@
 {
   "run": {
-    "command": "nx serve estima",
-    "startTime": "2025-02-02T20:11:07.995Z",
-    "endTime": "2025-02-02T20:11:36.551Z",
+    "command": "nx serve",
+    "startTime": "2025-02-26T20:06:03.110Z",
+    "endTime": "2025-02-26T20:06:05.904Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,9 @@
       "taskId": "estima:serve:development",
       "target": "serve",
       "projectName": "estima",
-      "hash": "5079725056492605562",
-      "startTime": "2025-02-02T20:11:08.122Z",
-      "endTime": "2025-02-02T20:11:36.551Z",
+      "hash": "18261798502524424417",
+      "startTime": "2025-02-26T20:06:03.120Z",
+      "endTime": "2025-02-26T20:06:05.903Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 1

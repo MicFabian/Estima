@@ -12,256 +12,12 @@
     "projectFileMap": {
       "estima": [
         {
-          "file": ".angular/cache/19.0.5/estima/.tsbuildinfo",
-          "hash": "9165687085374233356"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_common.js",
-          "hash": "14284075298172192214"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_common.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_common_http.js",
-          "hash": "11109328370634431226"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_common_http.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_core.js",
-          "hash": "12680820223420074736"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_core.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_forms.js",
-          "hash": "3991289290476462843"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_forms.js.map",
-          "hash": "4965088339880516655"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_platform-browser.js",
-          "hash": "2792347307317105083"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_platform-browser.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_router.js",
-          "hash": "12931182099099728221"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@angular_router.js.map",
-          "hash": "2913805941309862550"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@ngxs_storage-plugin.js",
-          "hash": "9433990717722177434"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@ngxs_storage-plugin.js.map",
-          "hash": "7305927627524772906"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@ngxs_store.js",
-          "hash": "10284557548961990029"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/@ngxs_store.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/_metadata.json",
-          "hash": "14797223316434808337"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-DYBS5Y4M.js",
-          "hash": "9801487417416879954"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-DYBS5Y4M.js.map",
-          "hash": "12906037485660243494"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-EPAV4CNQ.js",
-          "hash": "13792551943111661083"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-EPAV4CNQ.js.map",
-          "hash": "12254933923245458693"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-KHUKZC2W.js",
-          "hash": "4333478296718243487"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-KHUKZC2W.js.map",
-          "hash": "12091153757246699512"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-MZQRBCCH.js",
-          "hash": "12405068645022605347"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-MZQRBCCH.js.map",
-          "hash": "13297430504270640286"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-NUUYHDWF.js",
-          "hash": "16127205168287836279"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-NUUYHDWF.js.map",
-          "hash": "12994938470851582065"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-WHEXROJC.js",
-          "hash": "1477233115361764828"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-WHEXROJC.js.map",
-          "hash": "18335439059942011403"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-ZNFT2N62.js",
-          "hash": "16040150303567798434"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/chunk-ZNFT2N62.js.map",
-          "hash": "1361736858568825575"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/keycloak-angular.js",
-          "hash": "10305144054406148801"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/keycloak-angular.js.map",
-          "hash": "1126386811254789106"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/package.json",
-          "hash": "8630294688235076505"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/rxjs.js",
-          "hash": "15350327751431420651"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/rxjs.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/tslib.js",
-          "hash": "3544121874541880806"
-        },
-        {
-          "file": ".angular/cache/19.0.5/estima/vite/deps/tslib.js.map",
-          "hash": "9947606979680686569"
-        },
-        {
-          "file": ".git/FETCH_HEAD",
-          "hash": "11874675017285380974"
-        },
-        {
-          "file": ".idea/.gitignore",
-          "hash": "1842501858224282067"
-        },
-        {
-          "file": ".idea/codeStyles/Project.xml",
-          "hash": "9812753289646980015"
-        },
-        {
-          "file": ".idea/codeStyles/codeStyleConfig.xml",
-          "hash": "4690022301721055948"
-        },
-        {
-          "file": ".idea/compiler.xml",
-          "hash": "5529015696922484009"
-        },
-        {
-          "file": ".idea/estima.iml",
-          "hash": "7210100432694438571"
-        },
-        {
-          "file": ".idea/git_toolbox_blame.xml",
-          "hash": "10563179705875868391"
-        },
-        {
-          "file": ".idea/gradle.xml",
-          "hash": "3676129946998752412"
-        },
-        {
-          "file": ".idea/inspectionProfiles/Project_Default.xml",
-          "hash": "8912173605315939135"
-        },
-        {
-          "file": ".idea/jarRepositories.xml",
-          "hash": "16292753772999088714"
-        },
-        {
-          "file": ".idea/jpa-buddy.xml",
-          "hash": "717699396770609822"
-        },
-        {
-          "file": ".idea/misc.xml",
-          "hash": "3149574375077731111"
-        },
-        {
-          "file": ".idea/modules.xml",
-          "hash": "12003476126035599817"
-        },
-        {
-          "file": ".idea/modules/estimabackend.main.iml",
-          "hash": "3061730906721442516"
-        },
-        {
-          "file": ".idea/palantir-java-format.xml",
-          "hash": "12959315345517373826"
-        },
-        {
-          "file": ".idea/uiDesigner.xml",
-          "hash": "1669276093529694887"
-        },
-        {
-          "file": ".idea/vcs.xml",
-          "hash": "562075259085954184"
+          "file": ".gitignore",
+          "hash": "9314697489009456887"
         },
         {
           "file": ".npmrc",
           "hash": "17473838194016860888"
-        },
-        {
-          "file": ".nx/workspace-data/D08789D6-CB7E-5C6D-9D50-2748E6D236BF.db",
-          "hash": "12834179168492437333"
-        },
-        {
-          "file": ".nx/workspace-data/D08789D6-CB7E-5C6D-9D50-2748E6D236BF.db-shm",
-          "hash": "9814544801043246243"
-        },
-        {
-          "file": ".nx/workspace-data/D08789D6-CB7E-5C6D-9D50-2748E6D236BF.db-wal",
-          "hash": "15082408457372360657"
-        },
-        {
-          "file": ".nx/workspace-data/file-map.json",
-          "hash": "6827716317376493113"
-        },
-        {
-          "file": ".nx/workspace-data/nx_files.nxt",
-          "hash": "393481181192541465"
-        },
-        {
-          "file": ".nx/workspace-data/project-graph.json",
-          "hash": "16823843413739243946"
         },
         {
           "file": ".prettierignore",
@@ -280,6 +36,10 @@
           "hash": "12488066130401078493"
         },
         {
+          "file": ".windsurfrules",
+          "hash": "3746110367126296547"
+        },
+        {
           "file": "Readme.md",
           "hash": "14572652850192758628"
         },
@@ -293,7 +53,7 @@
         },
         {
           "file": "backend/build.gradle",
-          "hash": "9930159181572724996"
+          "hash": "2528254457897751770"
         },
         {
           "file": "backend/gradle/wrapper/gradle-wrapper.jar",
@@ -320,6 +80,10 @@
           "hash": "1658508512497547368"
         },
         {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/configuration/WebSocketConfig.java",
+          "hash": "8836920737239226883"
+        },
+        {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/configurations/application/ConfigController.java",
           "hash": "4047432008757775050"
         },
@@ -329,15 +93,15 @@
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/configurations/infastructure/SecurityConfig.java",
-          "hash": "10471210869802450151"
+          "hash": "6776812121724735502"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/Room.java",
-          "hash": "6268186433847983615"
+          "hash": "12625441678520776165"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomController.java",
-          "hash": "15101325376156128284"
+          "hash": "14553708484769718205"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomRepository.java",
@@ -345,55 +109,131 @@
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomService.java",
-          "hash": "1653639582477967064"
+          "hash": "9050138363554904822"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/Story.java",
+          "hash": "16154226690393045701"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/CreateRoomRequest.java",
           "hash": "12572128297048428783"
         },
         {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/FinalizeStoryRequest.java",
+          "hash": "11505191354277194992"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/RoomRequest.java",
+          "hash": "4668844986472052289"
+        },
+        {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/RoomResponse.java",
-          "hash": "9576426287398211306"
+          "hash": "12195982639857799896"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/StoryRequest.java",
+          "hash": "9627546970485188917"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/events/StoryDeletedEvent.java",
+          "hash": "4323639863496948974"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/events/StoryVotingEvent.java",
+          "hash": "7415488816708934072"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/shared/DiscussionStartedEvent.java",
+          "hash": "4245968794237373916"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/shared/EventService.java",
+          "hash": "5864588858389829174"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/shared/GlobalExceptionHandler.java",
+          "hash": "1247644833491758078"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/Vote.java",
-          "hash": "6109871043459361790"
+          "hash": "10372722159138059725"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteRepository.java",
-          "hash": "7635403432021196026"
+          "hash": "17914902979408086367"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteService.java",
-          "hash": "14635129790131376137"
+          "hash": "11379256084394814162"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteValue.java",
           "hash": "1639766993783938016"
         },
         {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteWebSocketService.java",
+          "hash": "4739932788373684720"
+        },
+        {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VotesController.java",
-          "hash": "5881494681573410765"
+          "hash": "523188570463455101"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/dto/CreateVoteRequest.java",
+          "hash": "242572456003781060"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/dto/UpdateVoteRequest.java",
+          "hash": "8881756357293249184"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/dto/VoteRequest.java",
-          "hash": "13745405994653188904"
+          "hash": "8200933734889232423"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/dto/VoteResponse.java",
-          "hash": "1345287771387220887"
+          "hash": "6850688070434796031"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/event/DiscussAndResolveEvent.java",
+          "hash": "11134368724442062384"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/event/VotingEvent.java",
+          "hash": "13779834058832460094"
         },
         {
           "file": "backend/src/main/resources/application.properties",
-          "hash": "507434179847330059"
+          "hash": "9128525134919195288"
         },
         {
           "file": "backend/src/main/resources/db/migration/V1__create_rooms_schema.sql",
-          "hash": "11428601272517528195"
+          "hash": "4165228203083353115"
         },
         {
-          "file": "backend/src/main/resources/db/migration/V2__create_votes_schema.sql",
-          "hash": "12276220558795980698"
+          "file": "backend/src/main/resources/db/migration/V2__update_votes_value_type.sql",
+          "hash": "7289030008970598402"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V3__add_ready_to_votes.sql",
+          "hash": "6787912140046901610"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V4__add_created_at_to_votes.sql",
+          "hash": "14860165133491597"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V5__add_ready_status_to_votes.sql",
+          "hash": "6663832942223291365"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V6__add_voting_active_to_stories.sql",
+          "hash": "15702711683829171958"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V7__add_voting_phase_to_stories.sql",
+          "hash": "4047143519186019906"
         },
         {
           "file": "backend/src/main/resources/templates/home.html",
@@ -440,11 +280,11 @@
         },
         {
           "file": "package-lock.json",
-          "hash": "2571458325351533360"
+          "hash": "18092557914424215404"
         },
         {
           "file": "package.json",
-          "hash": "1057995222554739814",
+          "hash": "988348525997979477",
           "deps": [
             "npm:@angular-devkit/build-angular",
             "npm:@angular-devkit/core",
@@ -481,13 +321,19 @@
             "npm:typescript",
             "npm:typescript-eslint",
             "npm:@angular/animations",
+            "npm:@angular/cdk",
             "npm:@angular/common",
             "npm:@angular/compiler",
             "npm:@angular/core",
             "npm:@angular/forms",
+            "npm:@angular/material",
             "npm:@angular/platform-browser",
             "npm:@angular/platform-browser-dynamic",
             "npm:@angular/router",
+            "npm:@ngxs/storage-plugin",
+            "npm:@ngxs/store",
+            "npm:@stomp/ng2-stompjs",
+            "npm:@stomp/rx-stomp",
             "npm:keycloak-angular",
             "npm:keycloak-js",
             "npm:rxjs",
@@ -496,7 +342,7 @@
         },
         {
           "file": "project.json",
-          "hash": "2132501938212110646"
+          "hash": "8369761800354045997"
         },
         {
           "file": "public/silent-check-sso.html",
@@ -507,8 +353,16 @@
           "hash": "2208497644138943229"
         },
         {
+          "file": "src/app/app-routing.module.ts",
+          "hash": "12098835267606569423",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
           "file": "src/app/app.component.ts",
-          "hash": "16309232872136903572",
+          "hash": "4429278049039139347",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -516,16 +370,18 @@
         },
         {
           "file": "src/app/app.config.ts",
-          "hash": "7315955253846734896",
+          "hash": "11888165004933156985",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
-            "npm:@angular/common"
+            "npm:@angular/common",
+            "npm:@angular/platform-browser",
+            "npm:@stomp/ng2-stompjs"
           ]
         },
         {
           "file": "src/app/app.routes.ts",
-          "hash": "16950500162254231411",
+          "hash": "2216612854282779637",
           "deps": [
             "npm:@angular/router"
           ]
@@ -555,7 +411,11 @@
         },
         {
           "file": "src/app/auth/feature/login/login.component.html",
-          "hash": "8631325206028591433"
+          "hash": "7546349858732941369"
+        },
+        {
+          "file": "src/app/auth/feature/login/login.component.scss",
+          "hash": "3154444170213799082"
         },
         {
           "file": "src/app/auth/feature/login/login.component.spec.ts",
@@ -566,7 +426,7 @@
         },
         {
           "file": "src/app/auth/feature/login/login.component.ts",
-          "hash": "1933744452854753619",
+          "hash": "6771484947165566096",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -591,6 +451,10 @@
           "hash": "2028290916672620136"
         },
         {
+          "file": "src/app/auth/ui/user-profile/user-profile.component.scss",
+          "hash": "5192546095790005810"
+        },
+        {
           "file": "src/app/auth/ui/user-profile/user-profile.component.spec.ts",
           "hash": "4912652434141804925",
           "deps": [
@@ -599,7 +463,7 @@
         },
         {
           "file": "src/app/auth/ui/user-profile/user-profile.component.ts",
-          "hash": "15727157083351290750",
+          "hash": "8811464278271493727",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common"
@@ -618,12 +482,67 @@
           ]
         },
         {
-          "file": "src/app/dashboard/feature/dashboard.component.ts",
-          "hash": "12031179102000035800",
+          "file": "src/app/core/guards/auth.guard.ts",
+          "hash": "2900206431732229152",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:keycloak-angular"
+          ]
+        },
+        {
+          "file": "src/app/core/interceptors/api.interceptor.factory.ts",
+          "hash": "11749002884281995099",
+          "deps": [
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "src/app/core/interceptors/api.interceptor.ts",
+          "hash": "15791544129017705718",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
-            "npm:keycloak-angular"
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/core/websocket/rx-stomp-service-factory.ts",
+          "hash": "14236021834771959364",
+          "deps": [
+            "npm:@stomp/ng2-stompjs",
+            "npm:@stomp/rx-stomp"
+          ]
+        },
+        {
+          "file": "src/app/dashboard/feature/dashboard.component.html",
+          "hash": "13410587119013386569"
+        },
+        {
+          "file": "src/app/dashboard/feature/dashboard.component.scss",
+          "hash": "9918911503229713196"
+        },
+        {
+          "file": "src/app/dashboard/feature/dashboard.component.ts",
+          "hash": "2740212559761791097",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "src/app/discussion/discussion-chat.component.html",
+          "hash": "7662628563634332410"
+        },
+        {
+          "file": "src/app/discussion/discussion-chat.component.scss",
+          "hash": "3465965017804568592"
+        },
+        {
+          "file": "src/app/discussion/discussion-chat.component.ts",
+          "hash": "10101735288293681943",
+          "deps": [
+            "npm:@angular/core"
           ]
         },
         {
@@ -645,11 +564,41 @@
           ]
         },
         {
-          "file": "src/app/rooms/data-access/state/rooms.service.ts",
-          "hash": "9613962860607978726",
+          "file": "src/app/rooms/data-access/state/room-events.service.ts",
+          "hash": "16502046618864836427",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/common"
+            "npm:@stomp/ng2-stompjs",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/rooms/data-access/state/rooms.service.ts",
+          "hash": "13252282654069109431",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:keycloak-angular",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/rooms/data-access/state/vote.service.ts",
+          "hash": "17304079974770947073",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/rooms/feature/add-story-dialog/add-story-dialog.component.ts",
+          "hash": "12512938253091202953",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/material"
           ]
         },
         {
@@ -662,7 +611,7 @@
         },
         {
           "file": "src/app/rooms/feature/room-creation/room-creation.component.ts",
-          "hash": "17653891298026609386",
+          "hash": "10640206848890885364",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -670,50 +619,117 @@
           ]
         },
         {
+          "file": "src/app/rooms/feature/room-view/room-view.component.html",
+          "hash": "8135783981228039928"
+        },
+        {
+          "file": "src/app/rooms/feature/room-view/room-view.component.scss",
+          "hash": "12643720758248353428"
+        },
+        {
+          "file": "src/app/rooms/feature/room-view/room-view.component.ts",
+          "hash": "7227472241628083169",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/material",
+            "npm:@angular/router",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/rooms/feature/rooms-list/rooms-list.component.html",
+          "hash": "9752267441210986090"
+        },
+        {
+          "file": "src/app/rooms/feature/rooms-list/rooms-list.component.ts",
+          "hash": "5232178774844234275",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:@angular/forms",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/rooms/feature/story-management/story-management.component.ts",
+          "hash": "3506620306323560012",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/rooms/feature/voting-cards/voting-cards.component.html",
+          "hash": "9727877428272935795"
+        },
+        {
+          "file": "src/app/rooms/feature/voting-cards/voting-cards.component.scss",
+          "hash": "7436070854665687984"
+        },
+        {
+          "file": "src/app/rooms/feature/voting-cards/voting-cards.component.ts",
+          "hash": "10982141756873243172",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/shared/types/room.types.ts",
+          "hash": "15319357855560800000"
+        },
+        {
           "file": "src/app/shared/types/vote.types.ts",
-          "hash": "5899608596883751780"
+          "hash": "11660751747196947150"
         },
         {
           "file": "src/app/votes/data-access/state/votes.service.ts",
-          "hash": "10781451144893601740",
+          "hash": "6512657335960984668",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/common"
+            "npm:@angular/common",
+            "npm:@stomp/ng2-stompjs",
+            "npm:rxjs"
           ]
         },
         {
           "file": "src/app/votes/data-access/votes-state/votes.state.ts",
-          "hash": "17512347611888656769",
+          "hash": "1041095832186309835",
           "deps": [
             "npm:@angular/core",
-            "npm:@ngxs/store"
-          ]
-        },
-        {
-          "file": "src/app/votes/data-access/votes.service.ts",
-          "hash": "18079060092629568865",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
             "npm:@ngxs/store",
             "npm:rxjs"
           ]
         },
         {
           "file": "src/app/votes/feature/vote-creation/vote-creation.component.ts",
-          "hash": "12287887943417611551",
+          "hash": "5256801134593692682",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
-            "npm:keycloak-angular"
+            "npm:@angular/forms"
           ]
         },
         {
           "file": "src/app/votes/feature/votes-history/votes-history.component.ts",
-          "hash": "4814180157363690309",
+          "hash": "16078707649757447243",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "src/app/votes/feature/votes-overview/votes-overview.component.ts",
+          "hash": "1131701582583294860",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/material"
           ]
         },
         {
@@ -734,7 +750,7 @@
         },
         {
           "file": "src/index.html",
-          "hash": "15079250065995772496"
+          "hash": "10049949645009228440"
         },
         {
           "file": "src/main.ts",
@@ -755,7 +771,7 @@
         },
         {
           "file": "src/styles.scss",
-          "hash": "7273172219343507713"
+          "hash": "4195031505541015511"
         },
         {
           "file": "src/test-setup.ts",
