@@ -42,6 +42,11 @@ public class VoteService {
         vote.setStory(story);
         vote.setUserId(userId);
         vote.setValue(value);
+        
+        // Set createdAt timestamp if this is a new vote
+        if (vote.getCreatedAt() == null) {
+            vote.setCreatedAt(java.time.Instant.now());
+        }
 
         Vote savedVote = voteRepository.save(vote);
         return new VoteResponse(savedVote);
@@ -94,7 +99,8 @@ public class VoteService {
             return;
         }
 
-        // When voting stops/paused, clear previous votes
-        voteRepository.deleteByStoryId(event.getStoryId());
+        // When voting stops/paused, we WANT to keep the votes so they can be viewed
+        // and used in the discussion phase
+        // DO NOT delete votes here
     }
 }

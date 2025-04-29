@@ -72,9 +72,9 @@ export class VotesService {
         // Fetch votes when a story becomes active
         this.getVotesByRoom(room.id, story.id).subscribe();
       } else {
-        // Clear votes when voting is stopped
-        this.currentVotesSubject.next([]);
-        this.votes.set([]);
+        // When voting is stopped, reload votes to ensure we have the latest data
+        // Do NOT clear votes when voting is stopped as we need to display them
+        this.getVotesByRoom(room.id, story.id).subscribe();
       }
     });
   }
@@ -95,7 +95,7 @@ export class VotesService {
 
       const vote = await firstValueFrom(
         this.http.post<VoteResponse>(
-          `${environment.apiUrl}/votes`,
+          `${environment.apiUrl}/api/votes`,
           request
         )
       );
@@ -119,7 +119,7 @@ export class VotesService {
     try {
       const vote = await firstValueFrom(
         this.http.patch<VoteResponse>(
-          `${environment.apiUrl}/votes/${voteId}`,
+          `${environment.apiUrl}/api/votes/${voteId}`,
           request
         )
       );
@@ -145,7 +145,7 @@ export class VotesService {
     };
 
     return this.http.put<VoteResponse>(
-      `${environment.apiUrl}/votes/${voteId}`,
+      `${environment.apiUrl}/api/votes/${voteId}`,
       request
     ).pipe(
       tap({
@@ -177,7 +177,7 @@ export class VotesService {
     this.error.set(null);
 
     return this.http.get<VoteResponse[]>(
-      `${environment.apiUrl}/votes/room/${roomId}/story/${storyId}`
+      `${environment.apiUrl}/api/votes/room/${roomId}/story/${storyId}`
     ).pipe(
       tap({
         next: (votes) => {

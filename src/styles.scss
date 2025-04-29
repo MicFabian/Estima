@@ -6,6 +6,100 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: radial-gradient(ellipse at center, #ffffff 0%, #f8fafc 35%, #e6f2ff 65%, #d4e5ff 85%, #c7dcff 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Pattern Styles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.02; }
+  50% { transform: scale(1.05); opacity: 0.04; }
+  100% { transform: scale(1); opacity: 0.02; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+.bg-circle {
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0.03;
+  animation: pulse 15s infinite alternate ease-in-out;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-circle-1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #3498db, #9b59b6);
+  top: 10%;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.bg-circle-2 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #2ecc71, #3498db);
+  bottom: 20%;
+  left: -80px;
+  animation-delay: 5s;
+}
+
+.bg-circle-3 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #e74c3c, #f39c12);
+  top: 40%;
+  left: 60%;
+  animation-delay: 10s;
+}
+
+.bg-shape {
+  position: fixed;
+  opacity: 0.03;
+  animation: float 20s infinite alternate ease-in-out;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-shape-1 {
+  width: 180px;
+  height: 180px;
+  background: #3498db;
+  bottom: 15%;
+  right: 15%;
+  transform: rotate(45deg);
+  animation-delay: 2s;
+}
+
+.bg-shape-2 {
+  width: 120px;
+  height: 240px;
+  background: #9b59b6;
+  top: 20%;
+  left: 10%;
+  border-radius: 60px;
+  transform: rotate(-15deg);
+  animation-delay: 7s;
 }
 
 // Utility classes

@@ -17,6 +17,10 @@ public class RoomResponse {
     UUID currentStoryId;
     StoryResponse currentStory;
     List<String> participants;
+    
+    // Team information
+    UUID teamId;
+    String teamName;
 
     public RoomResponse(Room room) {
         this.id = room.getId();
@@ -28,6 +32,10 @@ public class RoomResponse {
         this.currentStory = room.getCurrentStory() != null ? new StoryResponse(room.getCurrentStory()) : null;
         this.currentStoryId = room.getCurrentStory() != null ? room.getCurrentStory().getId() : null;
         this.participants = room.getParticipants();
+        
+        // Add team information if this room belongs to a team
+        this.teamId = room.getTeam() != null ? room.getTeam().getId() : null;
+        this.teamName = room.getTeam() != null ? room.getTeam().getName() : null;
     }
 
     @Value

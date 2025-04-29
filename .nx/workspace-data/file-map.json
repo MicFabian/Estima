@@ -97,19 +97,19 @@
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/Room.java",
-          "hash": "12625441678520776165"
+          "hash": "4338275723189510964"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomController.java",
-          "hash": "14553708484769718205"
+          "hash": "14057044031078588043"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomRepository.java",
-          "hash": "8654102681265272673"
+          "hash": "605999146735518709"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/RoomService.java",
-          "hash": "9050138363554904822"
+          "hash": "11330034959284568418"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/Story.java",
@@ -125,11 +125,11 @@
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/RoomRequest.java",
-          "hash": "4668844986472052289"
+          "hash": "15284271592825247118"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/RoomResponse.java",
-          "hash": "12195982639857799896"
+          "hash": "9810737773260051526"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/rooms/dto/StoryRequest.java",
@@ -156,6 +156,54 @@
           "hash": "1247644833491758078"
         },
         {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/controller/TeamController.java",
+          "hash": "11610196683798437582"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/dto/CreateTeamRequest.java",
+          "hash": "6467298638593554165"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/dto/TeamDto.java",
+          "hash": "17980566498816965033"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/dto/TeamMemberRequest.java",
+          "hash": "6819324809541831763"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/entity/Team.java",
+          "hash": "13098566637063372925"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/repository/TeamRepository.java",
+          "hash": "17896728155352974068"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/teams/service/TeamService.java",
+          "hash": "7180150551070642935"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/users/controller/UserController.java",
+          "hash": "12504255168414878756"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/users/dto/UserDto.java",
+          "hash": "8324776189001063881"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/users/entity/User.java",
+          "hash": "2671810970222292999"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/users/repository/UserRepository.java",
+          "hash": "18409578948748491261"
+        },
+        {
+          "file": "backend/src/main/java/de/fabiani/estimabackend/modules/users/service/UserService.java",
+          "hash": "1011072554579732754"
+        },
+        {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/Vote.java",
           "hash": "10372722159138059725"
         },
@@ -165,7 +213,7 @@
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteService.java",
-          "hash": "11379256084394814162"
+          "hash": "10508719800234900843"
         },
         {
           "file": "backend/src/main/java/de/fabiani/estimabackend/modules/votes/VoteValue.java",
@@ -208,6 +256,10 @@
           "hash": "9128525134919195288"
         },
         {
+          "file": "backend/src/main/resources/db/migration/V10__add_team_id_to_rooms.sql",
+          "hash": "2653228889063095918"
+        },
+        {
           "file": "backend/src/main/resources/db/migration/V1__create_rooms_schema.sql",
           "hash": "4165228203083353115"
         },
@@ -234,6 +286,14 @@
         {
           "file": "backend/src/main/resources/db/migration/V7__add_voting_phase_to_stories.sql",
           "hash": "4047143519186019906"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V8__create_users_table.sql",
+          "hash": "18202455795004714688"
+        },
+        {
+          "file": "backend/src/main/resources/db/migration/V9__create_teams_tables.sql",
+          "hash": "3505912869257311739"
         },
         {
           "file": "backend/src/main/resources/templates/home.html",
@@ -280,7 +340,7 @@
         },
         {
           "file": "package-lock.json",
-          "hash": "18092557914424215404"
+          "hash": "3867017834985591564"
         },
         {
           "file": "package.json",
@@ -381,7 +441,7 @@
         },
         {
           "file": "src/app/app.routes.ts",
-          "hash": "2216612854282779637",
+          "hash": "675567930855211125",
           "deps": [
             "npm:@angular/router"
           ]
@@ -556,6 +616,22 @@
           ]
         },
         {
+          "file": "src/app/rooms/data-access/room.model.ts",
+          "hash": "6547064897146770323",
+          "deps": [
+            "npm:angular2-uuid"
+          ]
+        },
+        {
+          "file": "src/app/rooms/data-access/room.service.ts",
+          "hash": "6817136266247002141",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
           "file": "src/app/rooms/data-access/rooms-state/rooms.state.ts",
           "hash": "18010852774933935774",
           "deps": [
@@ -574,7 +650,7 @@
         },
         {
           "file": "src/app/rooms/data-access/state/rooms.service.ts",
-          "hash": "13252282654069109431",
+          "hash": "8543735376652222026",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -620,15 +696,15 @@
         },
         {
           "file": "src/app/rooms/feature/room-view/room-view.component.html",
-          "hash": "8135783981228039928"
+          "hash": "11234783790886604941"
         },
         {
           "file": "src/app/rooms/feature/room-view/room-view.component.scss",
-          "hash": "12643720758248353428"
+          "hash": "5312836614291793147"
         },
         {
           "file": "src/app/rooms/feature/room-view/room-view.component.ts",
-          "hash": "7227472241628083169",
+          "hash": "11209024263377472166",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -650,6 +726,13 @@
             "npm:@angular/router",
             "npm:@angular/forms",
             "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/rooms/feature/rooms.routes.ts",
+          "hash": "15570527499677993481",
+          "deps": [
+            "npm:@angular/router"
           ]
         },
         {
@@ -680,6 +763,25 @@
           ]
         },
         {
+          "file": "src/app/rooms/feature/voting/voting.component.html",
+          "hash": "11809835312323703456"
+        },
+        {
+          "file": "src/app/rooms/feature/voting/voting.component.scss",
+          "hash": "12287998878237580567"
+        },
+        {
+          "file": "src/app/rooms/feature/voting/voting.component.ts",
+          "hash": "9512926583991476399",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:@angular/material",
+            "npm:rxjs"
+          ]
+        },
+        {
           "file": "src/app/shared/types/room.types.ts",
           "hash": "15319357855560800000"
         },
@@ -688,8 +790,128 @@
           "hash": "11660751747196947150"
         },
         {
+          "file": "src/app/teams/data-access/team.service.ts",
+          "hash": "8010455236041520942",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/create-room-dialog/create-room-dialog.component.css",
+          "hash": "4358804623085295371"
+        },
+        {
+          "file": "src/app/teams/feature/create-room-dialog/create-room-dialog.component.html",
+          "hash": "317741435823266936"
+        },
+        {
+          "file": "src/app/teams/feature/create-room-dialog/create-room-dialog.component.ts",
+          "hash": "6993160562837285078",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/team-create.component.css",
+          "hash": "10447895225179325575"
+        },
+        {
+          "file": "src/app/teams/feature/team-create.component.html",
+          "hash": "583596159493097564"
+        },
+        {
+          "file": "src/app/teams/feature/team-create.component.ts",
+          "hash": "8090047764497171902",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/router",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/team-detail.component.css",
+          "hash": "13701994689031273877"
+        },
+        {
+          "file": "src/app/teams/feature/team-detail.component.html",
+          "hash": "3516241529733504975"
+        },
+        {
+          "file": "src/app/teams/feature/team-detail.component.ts",
+          "hash": "2704207892147325739",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "npm:rxjs",
+            "npm:keycloak-angular"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/team-list.component.css",
+          "hash": "6168238886512475759"
+        },
+        {
+          "file": "src/app/teams/feature/team-list.component.html",
+          "hash": "13641871672581906136"
+        },
+        {
+          "file": "src/app/teams/feature/team-list.component.ts",
+          "hash": "3449184296342707564",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/teams.module.ts",
+          "hash": "12193209856588209058",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/router",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "src/app/teams/feature/teams.routes.ts",
+          "hash": "5185946996392612696",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/teams/model/team.model.ts",
+          "hash": "8991641329813251156"
+        },
+        {
+          "file": "src/app/users/data-access/user.service.ts",
+          "hash": "7307329700738332856",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/users/model/user.model.ts",
+          "hash": "11732778008843253719"
+        },
+        {
           "file": "src/app/votes/data-access/state/votes.service.ts",
-          "hash": "6512657335960984668",
+          "hash": "17305502029845057673",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -704,6 +926,24 @@
             "npm:@angular/core",
             "npm:@ngxs/store",
             "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/votes/feature/estimation-complete-dialog/estimation-complete-dialog.component.html",
+          "hash": "9497860591959022155"
+        },
+        {
+          "file": "src/app/votes/feature/estimation-complete-dialog/estimation-complete-dialog.component.scss",
+          "hash": "13585037080830602044"
+        },
+        {
+          "file": "src/app/votes/feature/estimation-complete-dialog/estimation-complete-dialog.component.ts",
+          "hash": "6396802365274005555",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/material",
+            "npm:@angular/router"
           ]
         },
         {
@@ -725,7 +965,7 @@
         },
         {
           "file": "src/app/votes/feature/votes-overview/votes-overview.component.ts",
-          "hash": "1131701582583294860",
+          "hash": "18262217448932448420",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -750,11 +990,11 @@
         },
         {
           "file": "src/index.html",
-          "hash": "10049949645009228440"
+          "hash": "16550144332448570878"
         },
         {
           "file": "src/main.ts",
-          "hash": "8332797219915465970",
+          "hash": "13075122229259866917",
           "deps": [
             "npm:@angular/platform-browser",
             "npm:@ngxs/store",
@@ -762,6 +1002,7 @@
             "npm:@angular/common",
             "npm:@angular/core",
             "npm:keycloak-angular",
+            "npm:@angular/material",
             "npm:rxjs"
           ]
         },
@@ -771,7 +1012,7 @@
         },
         {
           "file": "src/styles.scss",
-          "hash": "4195031505541015511"
+          "hash": "1561299671201209375"
         },
         {
           "file": "src/test-setup.ts",

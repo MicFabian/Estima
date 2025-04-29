@@ -6,6 +6,7 @@ import { withNgxsStoragePlugin } from '@ngxs/storage-plugin';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAppInitializer, inject, importProvidersFrom } from '@angular/core';
 import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
+import { MatChipsModule } from '@angular/material/chips';
 import { ConfigState, SetConfig } from './app/config/data-access/config-state/config.state';
 import { VotesState } from './app/votes/data-access/votes-state/votes.state';
 import { firstValueFrom } from 'rxjs';
@@ -65,8 +66,8 @@ bootstrapApplication(AppComponent, {
       ConfigState,
       VotesState
     ]),
-    // Provide Keycloak configuration
-    importProvidersFrom(KeycloakAngularModule),
+    // Provide Keycloak and Angular Material Chips configuration
+    importProvidersFrom(KeycloakAngularModule, MatChipsModule),
 
     // Initialize Keycloak and Config before the app runs
     provideAppInitializer(initializeKeycloakAndConfig),

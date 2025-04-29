@@ -1,5 +1,6 @@
 package de.fabiani.estimabackend.modules.rooms;
 
+import de.fabiani.estimabackend.modules.teams.entity.Team;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,10 @@ public class Room {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "current_story_id")
     private Story currentStory;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     public Room(String name, String ownerId) {
         this.name = name;
@@ -44,5 +49,10 @@ public class Room {
         this.participants = new ArrayList<>();
         this.participants.add(ownerId); // Owner is automatically a participant
         this.stories = new ArrayList<>();
+    }
+    
+    public Room(String name, String ownerId, Team team) {
+        this(name, ownerId);
+        this.team = team;
     }
 }

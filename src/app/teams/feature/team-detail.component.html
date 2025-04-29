@@ -1,0 +1,177 @@
+<!-- Team details in the modern app-like design -->
+<div class="team-detail-modern-container">
+    <div *ngIf="!loading && !error">
+      <ng-container *ngIf="team; else noTeamTemplate">
+        <!-- Modern Team Header -->
+        <div class="team-header-accent">
+          <div class="team-header-row">
+            <!-- Back button on the left -->
+            <button mat-icon-button class="back-button-icon" (click)="navigateToTeams()">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            
+            <!-- Team info in the middle -->
+            <div class="team-header-center">
+              <div class="team-header-avatar" [ngStyle]="{'background': stringToColor(team.name)}">
+                {{ team.name ? team.name.charAt(0).toUpperCase() : '?' }}
+              </div>
+              <div class="team-header-info">
+                <div class="team-header-title">{{ team.name }}</div>
+                <div class="team-header-desc" *ngIf="team.description">{{ team.description }}</div>
+              </div>
+            </div>
+            
+            <!-- User badge on the right -->
+            <div class="team-header-user" *ngIf="team.owner">
+              <div class="user-badge">
+                <mat-icon>person</mat-icon>
+                <span>{{ team.owner.username }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Use the 'team' variable directly here from the ngIf alias -->
+        <div class="team-detail-content">
+          <!-- Team Details Accordion -->
+          <mat-accordion class="team-details-accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Team Details
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              
+              <!-- Owner Section -->
+              <div class="member-category" *ngIf="team.owner">
+                <h3>Owner</h3>
+                <div class="member-list">
+                  <div class="member-item owner-item">
+                    <div class="member-avatar" [ngStyle]="{'background': stringToColor(team.owner.username)}">
+                      {{ team.owner.username ? team.owner.username.charAt(0).toUpperCase() : '?' }}
+                    </div>
+                    <span class="member-name">{{ team.owner.username }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Regular Members Section -->
+              <div class="member-category">
+                <h3>Members ({{ team.members.length || 0 }})</h3>
+                <div class="member-list" *ngIf="team.members.length">
+                  <div *ngFor="let member of team.members" class="member-item" [hidden]="isOwner(member)">
+                    <div class="member-avatar" [ngStyle]="{'background': stringToColor(member.username)}">
+                      {{ member.username ? member.username.charAt(0).toUpperCase() : '?' }}
+                    </div>
+                    <span class="member-name">{{ member.username }}</span>
+                  </div>
+                </div>
+                <div *ngIf="hasNoRegularMembers()" class="no-members">
+                  No other members yet.
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <!-- Team Rooms Section -->
+          <div class="team-rooms-modern">
+            <div class="section-header">
+              <h3>Estimation Rooms ({{ teamRooms.length || 0 }})</h3>
+            </div>
+            
+            <ng-container *ngIf="!loadingRooms; else loadingRoomsTemplate">
+              <div class="room-grid-modern" *ngIf="teamRooms.length; else noRoomsTemplate">
+                <mat-card class="room-card-modern" *ngFor="let room of teamRooms">
+                  <div class="card-color-accent" [ngStyle]="{'background': stringToColor(room.name)}"></div>
+                  <div class="room-card-flex">
+  <div class="room-avatar" [ngStyle]="{'background': stringToColor(room.name)}">
+    <mat-icon>meeting_room</mat-icon>
+  </div>
+  <div class="room-info-main">
+    <h3 class="room-title">{{ room.name }}</h3>
+    <div class="room-stats-flex">
+      <div class="stat-item">
+        <mat-icon class="stats-icon">group</mat-icon>
+        <span>{{ room.participants.length || 0 }} participants</span>
+      </div>
+      <div class="stat-item">
+        <mat-icon class="stats-icon">list_alt</mat-icon>
+        <span>{{ room.stories?.length || 0 }} stories</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-action" [routerLink]="['/rooms', room.id]">
+    <mat-icon class="action-icon">arrow_forward</mat-icon>
+  </div>
+</div>
+                </mat-card>
+              </div>
+            </ng-container>
+
+            <!-- Template for loading rooms state -->
+            <ng-template #loadingRoomsTemplate>
+              <div class="loading-rooms">
+                <mat-spinner diameter="24"></mat-spinner>
+                <span>Loading rooms...</span>
+              </div>
+            </ng-template>
+
+            <!-- Template for no rooms state -->
+            <ng-template #noRoomsTemplate>
+              <div class="no-rooms">
+                <mat-icon class="empty-icon">meeting_room</mat-icon>
+                <p class="empty-title">No Rooms Yet</p>
+                <p class="empty-desc">No estimation rooms created for this team yet.</p>
+              </div>
+            </ng-template>
+          </div>
+
+
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p class="loading-text">Loading team details...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h3 class="error-title">Error Loading Team</h3>
+      <p class="error-message">{{ error }}</p>
+      <button mat-stroked-button (click)="navigateToTeams()">Back to Teams List</button>
+    </div>
+
+    <!-- Fallback/Empty State -->
+    <ng-template #noTeamTemplate>
+      <div *ngIf="!loading && !error" class="error-container">
+        <mat-icon class="error-icon">search_off</mat-icon>
+        <h3 class="error-title">Team Not Found</h3>
+        <p class="error-message">This team could not be found or loaded.</p>
+        <button mat-stroked-button (click)="navigateToTeams()">Back to Teams List</button>
+      </div>
+    </ng-template>
+    
+    <!-- App-like Tab Bar -->
+    <div class="tab-bar" *ngIf="!loading && !error && team">
+      <button mat-button class="tab-button" (click)="navigateToTeams()">
+        <mat-icon>arrow_back</mat-icon>
+        <span class="tab-label">Back</span>
+      </button>
+      
+      <button mat-button class="tab-button create-button" *ngIf="isMember" (click)="createRoom()">
+        <mat-icon>add_circle</mat-icon>
+        <span class="tab-label">Create</span>
+      </button>
+      
+      <button mat-button class="tab-button" [routerLink]="['/profile']">
+        <mat-icon>person</mat-icon>
+        <span class="tab-label">Profile</span>
+      </button>
+    </div>
+    
+
+  </div>

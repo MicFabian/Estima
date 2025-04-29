@@ -1,0 +1,28 @@
+<mat-card class="create-team-card">
+  <mat-card-header>
+      <mat-card-title>Create a New Team</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" #teamForm="ngForm">
+      <mat-form-field appearance="outline" class="full-width-field">
+        <mat-label>Team Name</mat-label>
+        <input matInput [(ngModel)]="model.name" name="name" required #name="ngModel">
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">Team name is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="model.description" name="description"></textarea> 
+      </mat-form-field>
+
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+
+      <mat-card-actions align="end">
+        <button mat-button type="button" routerLink="/teams">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!teamForm.form.valid || loading">
+          {{ loading ? 'Creating...' : 'Create Team' }}
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

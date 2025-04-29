@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Create Room for {{ data.teamName }}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Room Name</mat-label>
+    <input matInput [(ngModel)]="roomName" placeholder="Enter a name for the new room" cdkFocusInitial>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="!roomName.trim()" (click)="onCreate()">Create</button>
+</mat-dialog-actions>

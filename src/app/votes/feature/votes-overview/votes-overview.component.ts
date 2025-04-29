@@ -1,4 +1,4 @@
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import { Component, Input, computed, inject, signal, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,9 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VotesService } from '../../data-access/state/votes.service';
 import { RoomsService } from '../../../rooms/data-access/state/rooms.service';
 import { Story } from '../../../shared/types/room.types';
+import { EstimationCompleteDialogComponent } from '../estimation-complete-dialog/estimation-complete-dialog.component';
 
 @Component({
   selector: 'app-votes-overview',
@@ -20,7 +22,8 @@ import { Story } from '../../../shared/types/room.types';
     MatIconModule,
     MatDividerModule,
     MatChipsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   template: `
     <div class="votes-overview">
@@ -40,7 +43,7 @@ import { Story } from '../../../shared/types/room.types';
           @if (hasVotes()) {
             <div class="votes-grid">
               @for (vote of votes(); track vote.userId) {
-                <div class="vote-card" [class.revealed]="canRevealVotes()">
+                <div class="vote-card" [class.revealed]="isVoteRevealed(vote)">
                   <div class="vote-front">
                     @if (vote.ready) {
                       <mat-icon class="text-green-500">check_circle</mat-icon>
@@ -223,11 +226,22 @@ export class VotesOverviewComponent {
 
   private votesService = inject(VotesService);
   private roomsService = inject(RoomsService);
+  private dialog = inject(MatDialog);
 
   readonly votes = this.votesService.votesList;
   readonly resolvingVotes = signal(false);
   readonly selectedValue = signal<string | null>(null);
-  readonly votesRevealed = computed(() => this.story?.estimate !== null || (this.resolvingVotes() && this.canRevealVotes()));
+  readonly votesRevealed = computed(() => {
+    // Votes should be revealed if any of these conditions are true:
+    // 1. The voting is not active (stopped/paused)
+    // 2. Story has an estimate already
+    // 3. In resolving votes mode
+    // 4. Admin user is viewing
+    return !this.story?.votingActive || 
+           this.story?.estimate !== null || 
+           this.resolvingVotes() || 
+           this.isAdmin();
+  });
   readonly isAdmin = computed(() => this.roomsService.isOwner());
 
   readonly voteStats = computed(() => {
@@ -242,6 +256,41 @@ export class VotesOverviewComponent {
       averageVote: validVotes.length ? (total / validVotes.length).toFixed(1) : ''
     };
   });
+
+  // Track previous story ID to detect changes
+  private previousStoryId: string | null = null;
+
+  ngOnChanges(changes: SimpleChanges) {
+    // If story input changes, reload votes
+    if (changes['story'] && this.story) {
+      const currentStoryId = this.story.id;
+      const previousStoryId = this.previousStoryId;
+      
+      // Only reload if story ID changed or if we're in discussion phase
+      if (currentStoryId !== previousStoryId || 
+          this.story.votingPhase === 'DISCUSSING') {
+        console.log('Story changed or in discussion phase, reloading votes');
+        this.loadVotesForStory();
+        this.previousStoryId = currentStoryId;
+      }
+    }
+  }
+
+  private loadVotesForStory() {
+    if (this.story) {
+      const room = this.roomsService.currentRoom();
+      if (room) {
+        console.log('Loading votes for story:', this.story.id);
+        this.votesService.getVotesForStory(room.id, this.story.id).subscribe({
+          next: (votes) => {
+            console.log('Votes loaded in VotesOverviewComponent:', votes.length);
+            // No need to manually update votes as getVotesForStory already does this internally
+          },
+          error: (err) => console.error('Failed to load votes:', err)
+        });
+      }
+    }
+  }
 
   hasVotes(): boolean {
     return this.votes().length > 0;
@@ -266,11 +315,16 @@ export class VotesOverviewComponent {
   startResolution(): void {
     this.resolvingVotes.set(true);
     // Use moveToDiscussion instead of pauseVoting to properly transition to discussion phase
-    this.roomsService.moveToDiscussion(this.story.id).catch(error => {
-      console.error('Failed to start discussion phase', error);
-      // Fallback to just pausing voting if discussion transition fails
-      this.roomsService.pauseVoting(this.story.id);
-    });
+    this.roomsService.moveToDiscussion(this.story.id)
+      .then(() => {
+        // Explicitly reload votes after moving to discussion
+        this.loadVotesForStory();
+      })
+      .catch(error => {
+        console.error('Failed to start discussion phase', error);
+        // Fallback to just pausing voting if discussion transition fails
+        this.roomsService.pauseVoting(this.story.id);
+      });
   }
 
   getUniqueVotes(): string[] {
@@ -290,7 +344,23 @@ export class VotesOverviewComponent {
   finalizeVoting(): void {
     const stats = this.calculateStats();
     const averageVoteNumber = parseFloat(stats.averageVote.toFixed(1));
-    this.roomsService.finalizeVoting(this.story.id, averageVoteNumber);
+    
+    this.roomsService.finalizeVoting(this.story.id, averageVoteNumber).then(() => {
+      // Show the estimation complete dialog
+      const room = this.roomsService.currentRoom();
+      if (room) {
+        this.dialog.open(EstimationCompleteDialogComponent, {
+          width: '480px',
+          disableClose: true,
+          data: {
+            storyId: this.story.id,
+            roomId: room.id,
+            storyTitle: this.story.title,
+            estimateValue: averageVoteNumber
+          }
+        });
+      }
+    });
   }
 
   startNewRound(): void {
@@ -319,8 +389,23 @@ export class VotesOverviewComponent {
   }
 
   canRevealVotes(): boolean {
-    const votes = this.votes();
-    return votes.length > 0 && votes.every(v => v.ready);
+    // Reveal votes when:
+    // 1. Voting is not active, or
+    // 2. The current user is an admin
+    // Note: Individual votes can still be revealed based on their ready state
+    return !this.story?.votingActive || this.isAdmin();
+  }
+
+  isVoteRevealed(vote: any): boolean {
+    // A vote is revealed if:
+    // 1. Voting is not active (all votes are revealed), or
+    // 2. The current user is an admin (can see all votes), or
+    // 3. The vote is marked as ready (ready votes are always revealed), or
+    // 4. The vote belongs to the current user (users can always see their own votes)
+    return !this.story?.votingActive || 
+           this.isAdmin() || 
+           vote.ready || 
+           this.isCurrentUser(vote.userId);
   }
 
   markAsReady(): void {

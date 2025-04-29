@@ -24,8 +24,18 @@ public class RoomController {
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAllRooms(
             @RequestHeader("Authorization") String token) {
-        Jwt jwt = jwtDecoder.decode(token.replace("Bearer ", ""));
+        // Decode JWT token to verify authentication, but we're not using the JWT content
+        jwtDecoder.decode(token.replace("Bearer ", ""));
         return ResponseEntity.ok(roomService.getAllRooms());
+    }
+    
+    @GetMapping("/by-team/{teamId}")
+    public ResponseEntity<List<RoomResponse>> getRoomsByTeamId(
+            @PathVariable UUID teamId,
+            @RequestHeader("Authorization") String token) {
+        // Decode JWT token to verify authentication, but we're not using the JWT content
+        jwtDecoder.decode(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(roomService.getRoomsByTeamId(teamId));
     }
 
     @PostMapping

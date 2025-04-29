@@ -1,0 +1,298 @@
+<div class="team-detail-modern-container" *ngIf="currentRoom() as room">
+  <!-- Modern Header with Back Button and Room Details -->
+  <div class="team-header-accent">
+    <div class="team-header-row">
+      <button mat-icon-button class="back-button-icon" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div class="team-header-center">
+        <div class="team-header-info">
+          <div class="team-header-title">
+            <mat-icon class="room-icon">meeting_room</mat-icon> {{ room.name }}
+          </div>
+          <div class="team-header-subtitle" *ngIf="currentStory()">
+            <mat-icon class="story-icon">assessment</mat-icon> {{ currentStory()?.title }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="team-header-user">
+        <div class="room-members-counter">
+          <mat-icon>group</mat-icon>
+          <span>{{ room.participants.length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Voting Content Area -->
+  <div class="team-detail-content">
+    <!-- Story Card with Status Info -->
+    <mat-card class="story-detail-card" *ngIf="currentStory() as story">
+      <mat-card-content>
+        <div class="story-detail-header">
+          <div class="story-icon-container">
+            <mat-icon class="story-detail-icon">assessment</mat-icon>
+          </div>
+          <div class="story-header-info">
+            <h2 class="story-title">{{ story.title }}</h2>
+            <p class="story-description" *ngIf="story.description">{{ story.description }}</p>
+          </div>
+        </div>
+
+        <!-- Voting Status Badge -->
+        <div class="voting-status-badge" [ngClass]="{
+          'active': story.votingActive, 
+          'inactive': !story.votingActive && story.votingPhase === VotingPhase.VOTING,
+          'discussing': story.votingPhase === VotingPhase.DISCUSSING,
+          'completed': story.votingPhase === VotingPhase.FINISHED
+        }">
+          <mat-icon *ngIf="story.votingActive">play_circle</mat-icon>
+          <mat-icon *ngIf="!story.votingActive && story.votingPhase !== VotingPhase.DISCUSSING && story.votingPhase !== VotingPhase.FINISHED">visibility</mat-icon>
+          <mat-icon *ngIf="story.votingPhase === VotingPhase.DISCUSSING">forum</mat-icon>
+          <mat-icon *ngIf="story.votingPhase === VotingPhase.FINISHED">done_all</mat-icon>
+          <span *ngIf="story.votingActive">Voting Active</span>
+          <span *ngIf="!story.votingActive && story.votingPhase === VotingPhase.VOTING">Votes Revealed</span>
+          <span *ngIf="story.votingPhase === VotingPhase.DISCUSSING">Discussion Phase</span>
+          <span *ngIf="story.votingPhase === VotingPhase.FINISHED">Voting Completed</span>
+        </div>
+
+        <!-- Admin Control Buttons -->
+        <div class="admin-controls" *ngIf="isAdmin()">
+          <!-- Start Voting - Only shown when not started yet -->
+          <button mat-raised-button color="primary" *ngIf="!story.votingActive && story.votingPhase !== VotingPhase.DISCUSSING && story.votingPhase !== VotingPhase.FINISHED" (click)="startVoting()">
+            <mat-icon>play_arrow</mat-icon> Start Voting
+          </button>
+          
+          <!-- Stop/Reveal Votes - Only shown during active voting -->
+          <button mat-raised-button color="warn" *ngIf="story.votingActive" (click)="stopVoting()">
+            <mat-icon>visibility</mat-icon> Reveal Votes
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Main Content Sections for Different Voting Phases -->
+    <div class="voting-sections" *ngIf="currentStory() as story">
+      <!-- Voting Cards for Active Voting Phase -->
+      <mat-card class="content-card voting-card" *ngIf="story.votingActive && story.votingPhase === VotingPhase.VOTING">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="card-title-with-icon">
+              <mat-icon>how_to_vote</mat-icon>
+              <span>Vote on Story</span>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-voting-cards [story]="story"></app-voting-cards>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Votes Overview for Active Voting Phase -->
+      <mat-card class="content-card overview-card" *ngIf="(story.votingActive || hasVotesRevealed(story)) && story.votingPhase === VotingPhase.VOTING">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="card-title-with-icon">
+              <mat-icon>bar_chart</mat-icon>
+              <span>Votes Overview</span>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-votes-overview [story]="story"></app-votes-overview>
+          
+          <div class="admin-actions" *ngIf="isAdmin() && !story.votingActive">
+            <button mat-raised-button color="primary" (click)="moveToDiscussionPhase(story.id)">
+              <mat-icon>comment</mat-icon>
+              Move to Discussion
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Discussion Phase Card -->
+      <mat-card class="content-card discussion-card" *ngIf="story.votingPhase === VotingPhase.DISCUSSING">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="card-title-with-icon">
+              <mat-icon>forum</mat-icon>
+              <span>Discussion Phase</span>
+            </div>
+          </mat-card-title>
+          <mat-card-subtitle>Discuss the estimates and come to a consensus</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-statistics-grid">
+            <div class="vote-summary">
+              <h3 class="section-title">Vote Summary</h3>
+              <div class="votes-grid">
+                <div class="vote-result" *ngFor="let vote of votes()">
+                  <div class="vote-badge">{{ formatVoteValue(vote.value) }}</div>
+                  <div class="vote-user">{{ getUserDisplayName(vote.userId) || 'Participant' }}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="statistics">
+              <h3 class="section-title">Statistics</h3>
+              <div class="stat-item">
+                <span class="stat-label">Average:</span>
+                <span class="stat-value">{{ getAverageVote() }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Mode:</span>
+                <span class="stat-value">{{ getMostCommonVote() }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Range:</span>
+                <span class="stat-value">{{ getVoteRange() }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <mat-divider class="section-divider"></mat-divider>
+          
+          <div class="finalize-section" *ngIf="isAdmin()">
+            <h3 class="section-title">Finalize Estimation</h3>
+            <div class="finalize-form">
+              <div class="estimate-selector">
+                <div class="estimate-option" 
+                     *ngFor="let value of getUniqueVoteValues()" 
+                     [class.selected]="selectedEstimate === value"
+                     (click)="selectEstimate(value)">
+                  {{ formatVoteValue(value) }}
+                </div>
+              </div>
+              
+              <div class="action-buttons">
+                <button mat-raised-button color="primary" [disabled]="!selectedEstimate" (click)="finalizeEstimation(story)">
+                  <mat-icon>done_all</mat-icon>
+                  Finalize with {{ formatVoteValue(selectedEstimate) }}
+                </button>
+                
+                <button mat-stroked-button color="warn" (click)="restartVoting(story.id)">
+                  <mat-icon>replay</mat-icon>
+                  Restart Voting
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Completed Estimation Card -->
+      <mat-card class="content-card completed-card" *ngIf="story.votingPhase === VotingPhase.FINISHED">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="card-title-with-icon">
+              <mat-icon>done_all</mat-icon>
+              <span>Estimation Completed</span>
+            </div>
+          </mat-card-title>
+          <mat-card-subtitle>Story has been successfully estimated</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="results-grid">
+            <div class="result-card">
+              <h3 class="section-title">Final Estimate</h3>
+              <div class="estimate-badge">
+                {{ story.estimate }}
+              </div>
+            </div>
+            <div class="result-card">
+              <h3 class="section-title">Consensus Level</h3>
+              <div 
+                class="consensus-indicator" 
+                [class.high]="getConsensusLevel(story) > 0.7"
+                [class.medium]="getConsensusLevel(story) > 0.4 && getConsensusLevel(story) <= 0.7"
+                [class.low]="getConsensusLevel(story) <= 0.4">
+                {{ getConsensusText(story) }}
+              </div>
+            </div>
+          </div>
+          
+          <mat-divider class="section-divider"></mat-divider>
+          
+          <div class="vote-summary">
+            <h3 class="section-title">Vote Summary</h3>
+            <div class="votes-grid">
+              <div class="vote-result" *ngFor="let vote of votes()">
+                <div class="vote-badge">{{ formatVoteValue(vote.value) }}</div>
+                <div class="vote-user">{{ getUserDisplayName(vote.userId) || 'Participant' }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="action-row" *ngIf="isAdmin()">
+            <button mat-raised-button color="primary" (click)="restartVoting(story.id)">
+              <mat-icon>replay</mat-icon>
+              Restart Voting
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Not Started Yet Message -->
+      <div class="waiting-message" *ngIf="!story.votingActive && story.votingPhase !== VotingPhase.DISCUSSING && story.votingPhase !== VotingPhase.FINISHED && !hasVotesRevealed(story)">
+        <mat-card class="content-card">
+          <mat-card-content>
+            <div class="centered-content">
+              <mat-icon class="large-icon">play_circle_outline</mat-icon>
+              <h2 class="waiting-title">Waiting to Start Voting</h2>
+              <p class="waiting-text">The voting session has not started yet.</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- No Story Selected -->
+    <div class="no-story-selected" *ngIf="!currentStory()">
+      <mat-card class="content-card empty-state-card">
+        <mat-card-content>
+          <div class="centered-content">
+            <mat-icon class="large-icon">article</mat-icon>
+            <h2 class="message-title">No Story Selected</h2>
+            <p class="message-text">Please return to the room view and select a story.</p>
+            
+            <button mat-raised-button color="primary" class="action-button" (click)="goBack()">
+              <mat-icon>arrow_back</mat-icon>
+              Return to Room
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button mat-button class="tab-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      <span class="tab-label">Back</span>
+    </button>
+    
+    <button mat-button class="tab-button" [routerLink]="['/teams']">
+      <mat-icon>groups</mat-icon>
+      <span class="tab-label">Teams</span>
+    </button>
+    
+    <button mat-button class="tab-button" [routerLink]="['/rooms']">
+      <mat-icon>meeting_room</mat-icon>
+      <span class="tab-label">Rooms</span>
+    </button>
+    
+    <button mat-button class="tab-button" [routerLink]="['/profile']">
+      <mat-icon>person</mat-icon>
+      <span class="tab-label">Profile</span>
+    </button>
+  </div>
+</div>
+
+<!-- Loading state when no room data is available -->
+<div *ngIf="!currentRoom()" class="loading-container">
+  <mat-spinner></mat-spinner>
+  <p class="loading-text">Loading room...</p>
+</div>

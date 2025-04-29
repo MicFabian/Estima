@@ -1,0 +1,31 @@
+<div class="estimation-complete-container">
+  <div class="dialog-header">
+    <mat-icon class="success-icon">check_circle</mat-icon>
+    <h2 class="dialog-title">Estimation Complete!</h2>
+  </div>
+
+  <div class="dialog-content">
+    <div class="story-info">
+      <h3>{{ data.storyTitle }}</h3>
+      <p class="estimate-label">Final Estimate:</p>
+      <div class="estimate-card">
+        {{ formatEstimateValue() }}
+      </div>
+    </div>
+
+    <div class="congrats-message">
+      <p>The team has agreed on an estimate for this story!</p>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button color="primary" (click)="startNewStory()">
+      <mat-icon>replay</mat-icon>
+      Estimate Another Story
+    </button>
+    <button mat-raised-button color="primary" (click)="goToRoomOverview()">
+      <mat-icon>view_list</mat-icon>
+      Return to Room
+    </button>
+  </div>
+</div>

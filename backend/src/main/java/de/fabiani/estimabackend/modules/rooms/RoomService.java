@@ -6,6 +6,8 @@ import de.fabiani.estimabackend.modules.rooms.dto.RoomResponse;
 import de.fabiani.estimabackend.modules.rooms.dto.StoryRequest;
 import de.fabiani.estimabackend.modules.rooms.events.StoryVotingEvent;
 import de.fabiani.estimabackend.modules.shared.EventService;
+import de.fabiani.estimabackend.modules.teams.entity.Team;
+import de.fabiani.estimabackend.modules.teams.repository.TeamRepository;
 import de.fabiani.estimabackend.modules.votes.VoteRepository;
 import de.fabiani.estimabackend.modules.votes.event.DiscussAndResolveEvent;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,6 +26,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final VoteRepository voteRepository;
     private final EventService eventService;
+    private final TeamRepository teamRepository;
 
     @Transactional
     public Room getRoomById(UUID id) {
@@ -38,6 +42,17 @@ public class RoomService {
     @Transactional(readOnly = true)
     public List<RoomResponse> getAllRooms() {
         return roomRepository.findAll().stream()
+                .map(RoomResponse::new)
+                .collect(Collectors.toList());
+    }
+    
+    @Transactional(readOnly = true)
+    public List<RoomResponse> getRoomsByTeamId(UUID teamId) {
+        if (teamId == null) {
+            return Collections.emptyList();
+        }
+        
+        return roomRepository.findByTeamId(teamId).stream()
                 .map(RoomResponse::new)
                 .collect(Collectors.toList());
     }
@@ -125,26 +140,51 @@ public class RoomService {
         }
 
         Room room = new Room(request.getName(), userId);
-        return new RoomResponse(roomRepository.save(room));
+        
+        // Handle team association if provided
+        if (request.getTeamId() != null) {
+            Team team = teamRepository.findById(request.getTeamId())
+                    .orElseThrow(() -> new EntityNotFoundException("Team not found with ID: " + request.getTeamId()));
+            
+            // Check if user is a member of the team
+            if (!team.getMembers().stream().anyMatch(member -> member.getKeycloakId().equals(userId))) {
+                throw new IllegalStateException("You must be a member of the team to create a room for it");
+            }
+            
+            room.setTeam(team);
+        }
+        
+        Room savedRoom = roomRepository.save(room);
+        
+        return new RoomResponse(savedRoom);
     }
 
     @Transactional
     public RoomResponse joinRoom(UUID roomId, String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID cannot be null or empty");
-        }
-
         Room room = getRoomById(roomId);
+        
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+        
+        // Check team membership if room belongs to a team
+        if (room.getTeam() != null) {
+            Team team = room.getTeam();
+            boolean isMember = team.getMembers().stream()
+                    .anyMatch(member -> member.getKeycloakId().equals(userId));
+            
+            if (!isMember) {
+                throw new IllegalStateException("You must be a member of the team to join this room");
+            }
+        }
+        
+        // Don't add if already a participant
         if (!room.getParticipants().contains(userId)) {
             room.getParticipants().add(userId);
-            room = roomRepository.save(room);
         }
-
-        // If there's a current story, load its votes for the new participant
-        if (room.getCurrentStory() != null) {
-        }
-
-        return new RoomResponse(room);
+        
+        Room savedRoom = roomRepository.save(room);
+        return new RoomResponse(savedRoom);
     }
 
     @Transactional

@@ -11,8 +11,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
-import { VotingCardsComponent } from '../voting-cards/voting-cards.component';
-import { VotesOverviewComponent } from '../../../votes/feature/votes-overview/votes-overview.component';
+// These components are no longer used directly in the template
+// import { VotingCardsComponent } from '../voting-cards/voting-cards.component';
+// import { VotesOverviewComponent } from '../../../votes/feature/votes-overview/votes-overview.component';
 import { VoteService } from '../../data-access/state/vote.service';
 import { Story, VotingPhase } from '../../../shared/types/room.types';
 import { Vote } from '../../../shared/types/vote.types';
@@ -37,9 +38,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatProgressSpinnerModule,
     MatToolbarModule,
     MatDialogModule,
-    MatTooltipModule,
-    VotingCardsComponent,
-    VotesOverviewComponent
+    MatTooltipModule
   ],
   templateUrl: './room-view.component.html',
   styleUrls: ['./room-view.component.scss']
@@ -159,6 +158,14 @@ export class RoomViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  goToVoting(story: Story): void {
+    this.selectStory(story);
+    const roomId = this.currentRoom()?.id;
+    if (roomId && story) {
+      this.router.navigate(['/rooms', roomId, 'voting', story.id]);
+    }
+  }
+
   startVoting(): void {
     const story = this.currentStory();
     if (!story) return;
@@ -233,7 +240,7 @@ export class RoomViewComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/rooms']);
+    this.router.navigate(['/teams']);
   }
 
   getVotes(): Vote[] {
@@ -339,7 +346,7 @@ export class RoomViewComponent implements OnInit, OnDestroy {
     const numericVotes = votes.map(v => parseFloat(v.value)).filter(v => !isNaN(v));
     const averageVote = numericVotes.length > 0 ? numericVotes.reduce((a, b) => a + b, 0) / numericVotes.length : 0;
     const mostCommonVote = this.getMostCommonVote(votes);
-    const agreementCount = votes.filter(v => v.value === mostCommonVote).length;
+    const agreementCount = votes.filter(vote => vote.value === mostCommonVote).length;
     const consensus = totalVotes > 0 ? agreementCount / totalVotes : 0;
 
     return {
@@ -452,6 +459,22 @@ export class RoomViewComponent implements OnInit, OnDestroy {
     // In a real implementation, this would call a user service
     // to get the user's name based on their ID
     return `User ${userId.substring(0, 4)}`;
+  }
+  
+  /**
+   * Generates a consistent color based on a string input
+   * This matches the logic used in the team components
+   */
+  stringToColor(str: string): string {
+    if (!str) return '#1976d2';
+    
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 45%)`;
   }
 
   calculateAverageVote(): string {

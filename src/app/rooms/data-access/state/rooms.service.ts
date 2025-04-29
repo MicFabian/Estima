@@ -360,6 +360,8 @@ export class RoomsService {
         )
       );
       this.currentRoomSignal.set(updatedRoom);
+      // Reload all rooms to ensure we have the latest data
+      await this.loadRooms();
     } catch (err: any) {
       this.errorSignal.set(err.message || 'Failed to move to discussion phase.');
       throw err;

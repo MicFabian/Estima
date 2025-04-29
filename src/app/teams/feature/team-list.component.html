@@ -1,0 +1,94 @@
+<div class="team-detail-modern-container">
+  <div class="team-header-accent">
+    <div class="team-header-row">
+      <!-- Empty back button placeholder for consistent layout -->
+      <button mat-icon-button class="back-button-icon" style="visibility: hidden">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      
+      <!-- Header title -->
+      <div class="team-header-center">
+        <div class="team-header-title">Your Teams</div>
+      </div>
+      
+      <!-- User badge placeholder kept empty for consistent layout -->
+      <div class="team-header-user"></div>
+    </div>
+  </div>
+  <div class="team-detail-content">
+    <div *ngIf="loading" class="loading-indicator">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading teams...</span>
+    </div>
+    <div *ngIf="error" class="error-message">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Grid layout for team cards -->
+    <div *ngIf="!loading && teams.length > 0" class="team-grid">
+      <mat-card *ngFor="let team of teams" class="team-card" [routerLink]="['/teams', team.id]" matRipple>
+        <div class="card-color-accent" [ngStyle]="{'background': stringToColor(team.name)}"></div>
+        <div class="team-card-content">
+          <!-- Card Header with Team Info -->
+          <div class="team-card-header">
+            <div class="team-avatar" [ngStyle]="{'background': stringToColor(team.name)}">
+              {{ team.name ? team.name.charAt(0).toUpperCase() : '?' }}
+            </div>
+            <div class="team-info-main">
+              <h3 class="team-title">{{ team.name }}</h3>
+              <p class="team-description" [ngClass]="{'no-description': !team.description}">
+                {{ team.description || 'No description available.' }}
+              </p>
+            </div>
+          </div>
+          
+          <!-- Card Footer with Stats -->
+          <div class="team-card-footer">
+            <div class="team-stats">
+              <div class="stat-item member-count">
+                <mat-icon>group</mat-icon>
+                <span>{{ team.members.length || 0 }} members</span>
+              </div>
+              <div class="stat-item owner-info" *ngIf="team.owner">
+                <mat-icon>person</mat-icon>
+                <span>Owner: {{ team.owner.username }}</span>
+              </div>
+            </div>
+            
+            <!-- View Button -->
+            <div class="card-action">
+              <mat-icon class="action-icon">arrow_forward</mat-icon>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div *ngIf="!loading && !error && teams.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">groups</mat-icon>
+      <p class="empty-title">No Teams Yet</p>
+      <p class="empty-desc">You haven't joined or created any teams. Start by creating one!</p>
+    </div>
+  </div>
+
+  <!-- App-like Tab Bar -->
+  <div class="tab-bar">
+    <button mat-button class="tab-button active-tab">
+      <mat-icon>dashboard</mat-icon>
+      <span class="tab-label">Teams</span>
+    </button>
+    
+    <button mat-button class="tab-button create-button" routerLink="/teams/create">
+      <mat-icon>add_circle</mat-icon>
+      <span class="tab-label">Create</span>
+    </button>
+    
+    <button mat-button class="tab-button" [routerLink]="['/profile']">
+      <mat-icon>person</mat-icon>
+      <span class="tab-label">Profile</span>
+    </button>
+  </div>
+  
+
+</div>
